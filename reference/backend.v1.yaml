@@ -2,8 +2,17 @@ openapi: 3.0.0
 info:
   title: backend
   version: '1.0'
+  description: API for the backend of the final project
+  contact:
+    name: Daniel
+    url: 'https://github.com/dm94'
 servers:
   - url: 'http://localhost:3000'
+tags:
+  - name: chat
+  - name: users
+  - name: products
+  - name: token
 paths:
   '/users/{userId}':
     parameters:
@@ -25,15 +34,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
               examples:
-                Get User Alice Smith:
+                example-1:
                   value:
-                    id: 142
-                    firstName: Alice
-                    lastName: Smith
-                    email: alice.smith@gmail.com
+                    firstName: string
+                    lastName: string
+                    email: user@example.com
                     dateOfBirth: '1997-10-31'
                     emailVerified: true
-                    signUpDate: '2019-08-24'
+                    createDate: '2019-08-24'
+                    image: 'http://example.com'
+                    location: string
+                    lastConectionDate: '2019-08-24T14:15:22Z'
+                    token: string
+                    username: string
+                    password: pa$$word
+                    id: 0
         '404':
           description: User Not Found
       operationId: getUser
@@ -56,15 +71,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
               examples:
-                Updated User Rebecca Baker:
+                example-1:
                   value:
-                    id: 13
-                    firstName: Rebecca
-                    lastName: Baker
-                    email: rebecca@gmail.com
-                    dateOfBirth: '1985-10-02'
-                    emailVerified: false
+                    firstName: string
+                    lastName: string
+                    email: user@example.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
                     createDate: '2019-08-24'
+                    image: 'http://example.com'
+                    location: string
+                    lastConectionDate: '2019-08-24T14:15:22Z'
+                    token: string
+                    username: string
+                    password: pa$$word
+                    id: 0
         '404':
           description: User Not Found
         '409':
@@ -103,7 +124,7 @@ paths:
                   dateOfBirth: '1985-10-02'
               Update Image:
                 value:
-                  image: www.imagen.com
+                  image: 'https://dominio.com/imagen/dasda.jpg'
               Update Email:
                 value:
                   email: newemail@hotmail.es
@@ -145,15 +166,21 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
               examples:
-                New User Bob Fellow:
+                example-1:
                   value:
-                    id: 12
-                    firstName: Bob
-                    lastName: Fellow
-                    email: bob.fellow@gmail.com
-                    dateOfBirth: '1996-08-24'
-                    emailVerified: false
-                    createDate: '2020-11-18'
+                    firstName: string
+                    lastName: string
+                    email: user@example.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    createDate: '2019-08-24'
+                    image: 'http://example.com'
+                    location: string
+                    lastConectionDate: '2019-08-24T14:15:22Z'
+                    token: string
+                    username: string
+                    password: pa$$word
+                    id: 0
         '400':
           description: Missing Required Information
         '409':
@@ -181,9 +208,9 @@ paths:
             examples:
               Create User Bob Fellow:
                 value:
-                  firstName: Bob
-                  lastName: Fellow
-                  email: bob.fellow@gmail.com
+                  username: pepito
+                  password: asdasdad
+                  email: pepito@gmail.com
                   dateOfBirth: '1996-08-24'
         description: Post the necessary fields for the API to create a new user.
       description: Create a new user.
@@ -222,7 +249,7 @@ paths:
                       $ref: '#/components/schemas/Product'
       operationId: getUserProfile
       description: Returns the user profile
-  /products/:
+  /products:
     post:
       summary: Add products
       operationId: addProduct
@@ -403,13 +430,6 @@ paths:
                           text: string
                           date: '2019-08-24T14:15:22Z'
                           hasRead: true
-        '':
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Chat'
       operationId: getChats
       description: Returns chats from a user
       parameters:
@@ -476,6 +496,15 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Message'
+              examples:
+                example-1:
+                  value:
+                    - id: 0
+                      chatID: 0
+                      senderID: 0
+                      text: string
+                      date: '2019-08-24T14:15:22Z'
+                      hasRead: true
       operationId: getMessages
       description: Return messages from a chat
       tags:
@@ -734,3 +763,8 @@ components:
               text: string
               date: '2019-08-24T14:15:22Z'
               hasRead: true
+  securitySchemes:
+    token:
+      type: http
+      scheme: basic
+      description: ''
