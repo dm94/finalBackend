@@ -1235,7 +1235,7 @@ ul.nav-tabs {
                         <p class="marked">Add a message to a chat</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/users/{userId}chats/{chatId}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/users/{userId}/chats/{chatId}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -1257,7 +1257,7 @@ ul.nav-tabs {
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Chat-addMessage-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X POST\
- "http://localhost:3000/users/{userId}chats/{chatId}?token="</code></pre>
+ "http://localhost:3000/users/{userId}/chats/{chatId}?token="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Chat-addMessage-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -1588,7 +1588,7 @@ Token generated to access
                         <p class="marked">Hides the chat until both parties delete the chat</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/users/{userId}chats/{chatId}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="delete"><code><span class="pln">/users/{userId}/chats/{chatId}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -1610,7 +1610,7 @@ Token generated to access
                         <div class="tab-content">
                           <div class="tab-pane active" id="examples-Chat-deleteChat-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X DELETE\
- "http://localhost:3000/users/{userId}chats/{chatId}?token="</code></pre>
+ "http://localhost:3000/users/{userId}/chats/{chatId}?token="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Chat-deleteChat-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
@@ -2341,7 +2341,7 @@ Token generated to access
                         <p class="marked">Return messages from a chat</p>
                         <p></p>
                         <br />
-                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/users/{userId}chats/{chatId}</span></code></pre>
+                        <pre class="prettyprint language-html prettyprinted" data-type="get"><code><span class="pln">/users/{userId}/chats/{chatId}</span></code></pre>
                         <p>
                           <h3>Usage and SDK Samples</h3>
                         </p>
@@ -2364,7 +2364,7 @@ Token generated to access
                           <div class="tab-pane active" id="examples-Chat-getMessages-0-curl">
                             <pre class="prettyprint"><code class="language-bsh">curl -X GET\
  -H "Accept: application/json"\
- "http://localhost:3000/users/{userId}chats/{chatId}?token="</code></pre>
+ "http://localhost:3000/users/{userId}/chats/{chatId}?token="</code></pre>
                           </div>
                           <div class="tab-pane" id="examples-Chat-getMessages-0-java">
                             <pre class="prettyprint"><code class="language-java">import org.openapitools.client.*;
