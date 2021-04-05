@@ -473,7 +473,7 @@ paths:
       description: Create a chat with another user
       tags:
         - chat
-  '/users/{userId}chats/{chatId}':
+  '/users/{userId}/chats/{chatId}':
     parameters:
       - schema:
           type: string
