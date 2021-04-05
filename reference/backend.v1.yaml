@@ -1,0 +1,736 @@
+openapi: 3.0.0
+info:
+  title: backend
+  version: '1.0'
+servers:
+  - url: 'http://localhost:3000'
+paths:
+  '/users/{userId}':
+    parameters:
+      - schema:
+          type: integer
+        name: userId
+        in: path
+        required: true
+        description: Id of an existing user.
+    get:
+      summary: Get User Info
+      tags:
+        - users
+      responses:
+        '200':
+          description: User Found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Get User Alice Smith:
+                  value:
+                    id: 142
+                    firstName: Alice
+                    lastName: Smith
+                    email: alice.smith@gmail.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    signUpDate: '2019-08-24'
+        '404':
+          description: User Not Found
+      operationId: getUser
+      description: Retrieve the information of the user with the matching user ID.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          required: true
+          description: Token generated to access
+    patch:
+      summary: Update User Information
+      operationId: updateUser
+      responses:
+        '200':
+          description: User Updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                Updated User Rebecca Baker:
+                  value:
+                    id: 13
+                    firstName: Rebecca
+                    lastName: Baker
+                    email: rebecca@gmail.com
+                    dateOfBirth: '1985-10-02'
+                    emailVerified: false
+                    createDate: '2019-08-24'
+        '404':
+          description: User Not Found
+        '409':
+          description: Email Already Taken
+      description: Update the information of an existing user.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  description: 'If a new email is given, the user''s email verified property will be set to false.'
+                  format: email
+                dateOfBirth:
+                  type: string
+                  format: date
+                image:
+                  type: string
+                  format: uri
+                location:
+                  type: string
+            examples:
+              Update public info:
+                value:
+                  firstName: Pepito
+                  lastName: De los palotes
+                  location: Talavera de la Reina
+              Date of Birth:
+                value:
+                  dateOfBirth: '1985-10-02'
+              Update Image:
+                value:
+                  image: www.imagen.com
+              Update Email:
+                value:
+                  email: newemail@hotmail.es
+        description: Patch user properties to update.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Token generated to access
+          required: true
+      tags:
+        - users
+    delete:
+      summary: Delete User
+      operationId: deleteUser
+      responses:
+        '200':
+          description: OK
+      description: Delete User
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Token generated to access
+          required: true
+      tags:
+        - users
+  /user:
+    post:
+      summary: Create New User
+      operationId: addUser
+      responses:
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                New User Bob Fellow:
+                  value:
+                    id: 12
+                    firstName: Bob
+                    lastName: Fellow
+                    email: bob.fellow@gmail.com
+                    dateOfBirth: '1996-08-24'
+                    emailVerified: false
+                    createDate: '2020-11-18'
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Email Already Taken
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                dateOfBirth:
+                  type: string
+                  format: date
+                password:
+                  type: string
+                username:
+                  type: string
+              required:
+                - email
+                - dateOfBirth
+                - password
+                - username
+            examples:
+              Create User Bob Fellow:
+                value:
+                  firstName: Bob
+                  lastName: Fellow
+                  email: bob.fellow@gmail.com
+                  dateOfBirth: '1996-08-24'
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+      tags:
+        - users
+      parameters: []
+  '/users/{userId}/profile':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+        description: Id of an existing user.
+    get:
+      summary: Get Profile
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  userID:
+                    type: integer
+                  firstName:
+                    type: string
+                  location:
+                    type: string
+                  products:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+      operationId: getUserProfile
+      description: Returns the user profile
+  /products/:
+    post:
+      summary: Add products
+      operationId: addProduct
+      responses:
+        '201':
+          description: Created
+      description: Create a product
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: idSeller
+          description: Id of an existing user.
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tokenSeller
+          description: Token generated to access
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: name
+          description: Product name
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: price
+          required: true
+          description: Product price
+        - schema:
+            type: string
+            enum:
+              - plant
+              - insect
+          in: query
+          name: type
+          description: Product Type
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: image
+          description: Product Image
+        - schema:
+            type: string
+          in: query
+          name: description
+          description: Product Description
+        - schema:
+            type: string
+          in: query
+          name: specie
+          description: Product Specie
+        - schema:
+            type: string
+          in: query
+          name: size
+          description: Product Size
+        - schema:
+            type: boolean
+          in: query
+          name: egg
+          description: True if is egg or seed
+      tags:
+        - products
+    get:
+      summary: Get Products
+      operationId: getProducts
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+      description: 'Returns a list of products. Max: 10 products'
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - insect
+              - plant
+          in: query
+          name: type
+          description: Product Type
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: pag
+          description: Products page
+      tags:
+        - products
+  '/products/{productID}':
+    parameters:
+      - schema:
+          type: string
+        name: productID
+        in: path
+        required: true
+        description: Product ID
+    get:
+      summary: Get Product
+      tags:
+        - products
+      responses:
+        '200':
+          description: OK
+          headers: {}
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+      operationId: getProduct
+      description: Returns a product
+    patch:
+      summary: Update Product
+      operationId: updateProduct
+      responses:
+        '202':
+          description: Accepted
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: User token
+          description: Generated access token
+      description: Allows product data to be updated
+      tags:
+        - products
+    delete:
+      summary: Delete Product
+      operationId: deleteProduct
+      responses:
+        '204':
+          description: No Content
+      description: Allows the deletion of a product
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Generated access token
+      tags:
+        - products
+  '/users/{userId}/chats':
+    get:
+      summary: Get Messages
+      tags:
+        - chat
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+              examples:
+                example-1:
+                  value:
+                    - id: 0
+                      productID: 0
+                      sellerID: 0
+                      buyerID: 0
+                      deletedBySeller: true
+                      deletedByBuyer: true
+                      messages:
+                        - id: 0
+                          chatID: 0
+                          senderID: 0
+                          text: string
+                          date: '2019-08-24T14:15:22Z'
+                          hasRead: true
+        '':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Chat'
+      operationId: getChats
+      description: Returns chats from a user
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Token generated to access
+          required: true
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+    post:
+      summary: New chat
+      operationId: makeNewChat
+      responses:
+        '201':
+          description: Created
+      parameters:
+        - schema:
+            type: string
+          in: query
+          description: Token generated to access
+          name: token
+          required: true
+        - schema:
+            type: integer
+          in: query
+          name: idProduct
+          description: Product ID
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: message
+          description: First message
+          required: true
+      description: Create a chat with another user
+      tags:
+        - chat
+  '/users/{userId}chats/{chatId}':
+    parameters:
+      - schema:
+          type: string
+        name: userId
+        in: path
+        required: true
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+    get:
+      summary: Get Messages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+      operationId: getMessages
+      description: Return messages from a chat
+      tags:
+        - chat
+      parameters:
+        - schema:
+            type: string
+          in: query
+          description: Token generated to access
+          required: true
+          name: token
+    post:
+      summary: New message
+      operationId: addMessage
+      responses:
+        '201':
+          description: Created
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Token generated to access
+          required: true
+      description: Add a message to a chat
+      tags:
+        - chat
+    delete:
+      summary: Delete chat
+      operationId: deleteChat
+      responses:
+        '204':
+          description: No Content
+      description: Hides the chat until both parties delete the chat
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: token
+          description: Token generated to access
+          required: true
+      tags:
+        - chat
+  /token:
+    get:
+      summary: Get Token
+      tags:
+        - token
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  token:
+                    type: string
+        '400':
+          description: Missing parameters
+        '401':
+          description: Unauthorized
+      operationId: getToken
+      description: Returns a temporary access token
+      parameters:
+        - schema:
+            type: string
+            format: email
+          in: query
+          name: email
+          required: true
+        - schema:
+            type: string
+            format: password
+          in: query
+          name: password
+          required: true
+    parameters: []
+components:
+  schemas:
+    User:
+      title: User
+      type: object
+      description: ''
+      x-examples:
+        example-1:
+          id: 0
+          firstName: string
+          lastName: string
+          email: user@example.com
+          dateOfBirth: '1997-10-31'
+          emailVerified: true
+          createDate: '2019-08-24'
+          image: 'http://example.com'
+          location: string
+          lastConectionDate: '2019-08-24T14:15:22Z'
+          token: string
+          username: string
+          password: pa$$word
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        dateOfBirth:
+          type: string
+          format: date
+          example: '1997-10-31'
+        emailVerified:
+          type: boolean
+          description: Set to true if the user's email has been verified.
+        createDate:
+          type: string
+          format: date
+          description: The date that the user was created.
+        image:
+          type: string
+          format: uri
+        location:
+          type: string
+        lastConectionDate:
+          type: string
+          format: date-time
+        token:
+          type: string
+        username:
+          type: string
+          description: Unique identifier for the given user.
+        password:
+          type: string
+          format: password
+        id:
+          type: integer
+          description: Unique identifier for the given user.
+      required:
+        - firstName
+        - lastName
+        - email
+        - emailVerified
+        - token
+        - username
+        - password
+        - id
+    Product:
+      title: Product
+      type: object
+      x-examples:
+        example-1:
+          id: 0
+          idPublisher: 0
+          image: 'http://example.com'
+          title: string
+          specie: string
+          size: string
+          egg: true
+          price: 0
+          climate: string
+          type: plant
+          description: string
+      properties:
+        id:
+          type: integer
+        idPublisher:
+          type: integer
+        image:
+          type: string
+          format: uri
+        title:
+          type: string
+        specie:
+          type: string
+        size:
+          type: string
+        egg:
+          type: boolean
+        price:
+          type: number
+        climate:
+          type: string
+        type:
+          type: string
+          enum:
+            - plant
+            - insect
+        description:
+          type: string
+        publishedDate:
+          type: string
+          format: date
+      required:
+        - id
+        - idPublisher
+        - title
+        - price
+        - type
+    Message:
+      title: Message
+      type: object
+      properties:
+        id:
+          type: integer
+        chatID:
+          type: integer
+        senderID:
+          type: number
+        text:
+          type: string
+        date:
+          type: string
+          format: date-time
+        hasRead:
+          type: boolean
+      required:
+        - id
+        - chatID
+    Chat:
+      title: Chat
+      type: object
+      properties:
+        id:
+          type: integer
+        productID:
+          type: integer
+        sellerID:
+          type: integer
+        buyerID:
+          type: integer
+        deletedBySeller:
+          type: boolean
+        deletedByBuyer:
+          type: boolean
+        messages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Message'
+      required:
+        - id
+        - productID
+        - sellerID
+        - buyerID
+      x-examples:
+        example-1:
+          id: 0
+          productID: 0
+          sellerID: 0
+          buyerID: 0
+          deletedBySeller: true
+          deletedByBuyer: true
+          messages:
+            - id: 0
+              chatID: 0
+              senderID: 0
+              text: string
+              date: '2019-08-24T14:15:22Z'
+              hasRead: true
