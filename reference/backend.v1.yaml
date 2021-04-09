@@ -681,8 +681,6 @@ components:
           type: string
         size:
           type: string
-        egg:
-          type: boolean
         price:
           type: number
         climate:
@@ -697,6 +695,8 @@ components:
         publishedDate:
           type: string
           format: date
+        subspecie:
+          type: string
       required:
         - id
         - idPublisher
@@ -726,28 +726,6 @@ components:
     Chat:
       title: Chat
       type: object
-      properties:
-        id:
-          type: integer
-        productID:
-          type: integer
-        sellerID:
-          type: integer
-        buyerID:
-          type: integer
-        deletedBySeller:
-          type: boolean
-        deletedByBuyer:
-          type: boolean
-        messages:
-          type: array
-          items:
-            $ref: '#/components/schemas/Message'
-      required:
-        - id
-        - productID
-        - sellerID
-        - buyerID
       x-examples:
         example-1:
           id: 0
@@ -763,6 +741,24 @@ components:
               text: string
               date: '2019-08-24T14:15:22Z'
               hasRead: true
+      properties:
+        id:
+          type: integer
+        productID:
+          type: integer
+        sellerID:
+          type: integer
+        buyerID:
+          type: integer
+        deletedBySeller:
+          type: boolean
+        deletedByBuyer:
+          type: boolean
+      required:
+        - id
+        - productID
+        - sellerID
+        - buyerID
   securitySchemes:
     token:
       type: http
