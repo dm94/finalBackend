@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const SchemaMongo = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const Schema = new SchemaMongo({
+const UserSchema = new Schema({
   firstName: { type: String, require: true },
   email: { type: String, require: true, unique: true },
   password: { type: String, require: true },
@@ -15,7 +15,7 @@ const Schema = new SchemaMongo({
   location: { type: String, require: false },
 });
 
-Schema.pre("save", async function (next) {
+UserSchema.pre("save", async function (next) {
   try {
     const user = this;
     const hash = bcrypt.hashSync(user.password, bcrypt.genSaltSync(10));
@@ -26,9 +26,9 @@ Schema.pre("save", async function (next) {
   }
 });
 
-Schema.methods.isValidPassword = async function (password) {
+UserSchema.methods.isValidPassword = async function (password) {
   const compare = await bcrypt.compare(password, this.password);
   return compare;
 };
 
-module.exports = mongoose.model("users", Schema);
+module.exports = mongoose.model("users", UserSchema);

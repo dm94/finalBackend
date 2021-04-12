@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const SchemaMongo = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const Schema = new SchemaMongo({
+const ProductSchema = new Schema({
   idPublisher: { type: Schema.Types.ObjectId, ref: "user" },
   image: { type: String, require: false },
   title: { type: String, require: true },
@@ -16,4 +16,4 @@ const Schema = new SchemaMongo({
   subspecie: { type: String, require: false },
 });
 
-module.exports = mongoose.model("products", Schema);
+module.exports = mongoose.model("products", ProductSchema);

@@ -1,8 +1,8 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt");
-const SchemaMongo = mongoose.Schema;
+const Schema = mongoose.Schema;
 
-const Schema = new SchemaMongo({
+const MessageSchema = new Schema({
   chatID: { type: Schema.Types.ObjectId, ref: "chat" },
   senderID: { type: String, require: true },
   text: { type: String, require: true },
@@ -10,4 +10,4 @@ const Schema = new SchemaMongo({
   hasRead: { type: Boolean, require: false },
 });
 
-module.exports = mongoose.model("messages", Schema);
+module.exports = mongoose.model("messages", MessageSchema);
