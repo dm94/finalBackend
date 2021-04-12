@@ -22,44 +22,6 @@ paths:
         in: path
         required: true
         description: Id of an existing user.
-    get:
-      summary: Get User Info
-      tags:
-        - users
-      responses:
-        '200':
-          description: User Found
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                example-1:
-                  value:
-                    firstName: string
-                    lastName: string
-                    email: user@example.com
-                    dateOfBirth: '1997-10-31'
-                    emailVerified: true
-                    createDate: '2019-08-24'
-                    image: 'http://example.com'
-                    location: string
-                    lastConectionDate: '2019-08-24T14:15:22Z'
-                    token: string
-                    username: string
-                    password: pa$$word
-                    id: 0
-        '404':
-          description: User Not Found
-      operationId: getUser
-      description: Retrieve the information of the user with the matching user ID.
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          required: true
-          description: Token generated to access
     patch:
       summary: Update User Information
       operationId: updateUser
@@ -85,7 +47,7 @@ paths:
                     token: string
                     username: string
                     password: pa$$word
-                    id: 0
+                    _id: sadd
         '404':
           description: User Not Found
         '409':
@@ -129,15 +91,11 @@ paths:
                 value:
                   email: newemail@hotmail.es
         description: Patch user properties to update.
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Token generated to access
-          required: true
+      parameters: []
       tags:
         - users
+      security:
+        - token: []
     delete:
       summary: Delete User
       operationId: deleteUser
@@ -145,16 +103,12 @@ paths:
         '200':
           description: OK
       description: Delete User
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Token generated to access
-          required: true
+      parameters: []
       tags:
         - users
-  /user:
+      security:
+        - token: []
+  /users:
     post:
       summary: Create New User
       operationId: addUser
@@ -180,7 +134,7 @@ paths:
                     token: string
                     username: string
                     password: pa$$word
-                    id: 0
+                    _id: sadfs
         '400':
           description: Missing Required Information
         '409':
@@ -217,6 +171,22 @@ paths:
       tags:
         - users
       parameters: []
+    parameters: []
+    get:
+      summary: ''
+      operationId: getUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+      description: Retrieve the information of the user
+      tags:
+        - users
   '/users/{userId}/profile':
     parameters:
       - schema:
@@ -318,6 +288,8 @@ paths:
           description: True if is egg or seed
       tags:
         - products
+      security:
+        - token: []
     get:
       summary: Get Products
       operationId: getProducts
@@ -385,6 +357,8 @@ paths:
       description: Allows product data to be updated
       tags:
         - products
+      security:
+        - token: []
     delete:
       summary: Delete Product
       operationId: deleteProduct
@@ -400,6 +374,8 @@ paths:
           description: Generated access token
       tags:
         - products
+      security:
+        - token: []
   '/users/{userId}/chats':
     get:
       summary: Get Messages
@@ -414,31 +390,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Chat'
-              examples:
-                example-1:
-                  value:
-                    - id: 0
-                      productID: 0
-                      sellerID: 0
-                      buyerID: 0
-                      deletedBySeller: true
-                      deletedByBuyer: true
-                      messages:
-                        - id: 0
-                          chatID: 0
-                          senderID: 0
-                          text: string
-                          date: '2019-08-24T14:15:22Z'
-                          hasRead: true
+              examples: {}
       operationId: getChats
       description: Returns chats from a user
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Token generated to access
-          required: true
+      parameters: []
+      security:
+        - token: []
     parameters:
       - schema:
           type: string
@@ -452,12 +409,6 @@ paths:
         '201':
           description: Created
       parameters:
-        - schema:
-            type: string
-          in: query
-          description: Token generated to access
-          name: token
-          required: true
         - schema:
             type: integer
           in: query
@@ -473,6 +424,8 @@ paths:
       description: Create a chat with another user
       tags:
         - chat
+      security:
+        - token: []
   '/users/{userId}/chats/{chatId}':
     parameters:
       - schema:
@@ -499,9 +452,9 @@ paths:
               examples:
                 example-1:
                   value:
-                    - id: 0
-                      chatID: 0
-                      senderID: 0
+                    - _id: asdsfd
+                      chatID: sadad
+                      senderID: sdfsf
                       text: string
                       date: '2019-08-24T14:15:22Z'
                       hasRead: true
@@ -509,29 +462,21 @@ paths:
       description: Return messages from a chat
       tags:
         - chat
-      parameters:
-        - schema:
-            type: string
-          in: query
-          description: Token generated to access
-          required: true
-          name: token
+      parameters: []
+      security:
+        - token: []
     post:
       summary: New message
       operationId: addMessage
       responses:
         '201':
           description: Created
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Token generated to access
-          required: true
+      parameters: []
       description: Add a message to a chat
       tags:
         - chat
+      security:
+        - token: []
     delete:
       summary: Delete chat
       operationId: deleteChat
@@ -539,56 +484,63 @@ paths:
         '204':
           description: No Content
       description: Hides the chat until both parties delete the chat
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Token generated to access
-          required: true
+      parameters: []
       tags:
         - chat
-  /token:
-    get:
-      summary: Get Token
-      tags:
-        - token
+      security:
+        - token: []
+  /login:
+    parameters: []
+    post:
+      summary: ''
+      operationId: userLogin
       responses:
         '200':
           description: OK
           content:
             application/json:
               schema:
+                description: ''
                 type: object
                 properties:
-                  token:
+                  access_token:
                     type: string
+                    minLength: 1
+                  expires_in:
+                    type: integer
+                    format: int64
+                required:
+                  - access_token
+                  - expires_in
+              examples:
+                example-1:
+                  value:
+                    access_token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDc0OGJlYjJhNDE5OTJlN
+                    expires_in: 1618856387
         '400':
           description: Missing parameters
         '401':
           description: Unauthorized
-      operationId: getToken
       description: Returns a temporary access token
       parameters:
         - schema:
             type: string
-            format: email
           in: query
           name: email
           required: true
         - schema:
             type: string
-            format: password
           in: query
           name: password
           required: true
-    parameters: []
+      tags:
+        - users
 components:
   schemas:
     User:
       title: User
       type: object
-      description: ''
+      description: User schema
       x-examples:
         example-1:
           id: 0
@@ -605,13 +557,22 @@ components:
           username: string
           password: pa$$word
       properties:
-        firstName:
+        _id:
+          description: Unique identifier for the given user.
           type: string
-        lastName:
+        firstName:
           type: string
         email:
           type: string
           format: email
+        username:
+          type: string
+          description: Unique identifier for the given user.
+        password:
+          type: string
+          format: password
+        lastName:
+          type: string
         dateOfBirth:
           type: string
           format: date
@@ -628,29 +589,14 @@ components:
           format: uri
         location:
           type: string
-        lastConectionDate:
-          type: string
-          format: date-time
-        token:
-          type: string
-        username:
-          type: string
-          description: Unique identifier for the given user.
-        password:
-          type: string
-          format: password
-        id:
-          type: integer
-          description: Unique identifier for the given user.
       required:
         - firstName
         - lastName
         - email
         - emailVerified
-        - token
         - username
         - password
-        - id
+        - _id
     Product:
       title: Product
       type: object
@@ -668,10 +614,11 @@ components:
           type: plant
           description: string
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         idPublisher:
-          type: integer
+          type: string
+          description: User ID
         image:
           type: string
           format: uri
@@ -698,7 +645,7 @@ components:
         subspecie:
           type: string
       required:
-        - id
+        - _id
         - idPublisher
         - title
         - price
@@ -707,12 +654,14 @@ components:
       title: Message
       type: object
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         chatID:
-          type: integer
+          type: string
+          description: Chat ID
         senderID:
-          type: number
+          type: string
+          description: User ID
         text:
           type: string
         date:
@@ -721,8 +670,11 @@ components:
         hasRead:
           type: boolean
       required:
-        - id
+        - _id
         - chatID
+        - senderID
+        - text
+        - date
     Chat:
       title: Chat
       type: object
@@ -742,25 +694,29 @@ components:
               date: '2019-08-24T14:15:22Z'
               hasRead: true
       properties:
-        id:
-          type: integer
+        _id:
+          type: string
         productID:
-          type: integer
+          type: string
+          description: Product ID
         sellerID:
-          type: integer
+          type: string
+          description: User ID
         buyerID:
-          type: integer
+          type: string
+          description: User ID
         deletedBySeller:
           type: boolean
         deletedByBuyer:
           type: boolean
       required:
-        - id
+        - _id
         - productID
         - sellerID
         - buyerID
   securitySchemes:
     token:
       type: http
-      scheme: basic
-      description: ''
+      scheme: bearer
+security:
+  - token: []
