@@ -1,11 +1,11 @@
-Repositorio de la parte backend del proyecto final del curso FullStack 2021 v2
+Repository of the backend part of the final project of the FullStack 2021 v2 course.
 
-[Documentación](https://bump.sh/doc/api-backend)
+[Documentation](https://bump.sh/doc/api-backend)
 
 #### Environmental variables
 
-- MONGO_DB_PASS= Contraseña de la base de datos
-- MONGO_DB_NAME= Nombre de la base de datos
-- MONGO_DB_USER= Usuario de la base de datos
-- MONGO_DB_HOST= Servidor de la base de datos
-- SERVER_SECRET= Secret creado
+- MONGO_DB_PASS= Database password
+- MONGO_DB_NAME= Name of the database
+- MONGO_DB_USER= Database user
+- MONGO_DB_HOST= Database server
+- SERVER_SECRET= Secret created
