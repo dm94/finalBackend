@@ -14,6 +14,7 @@ const ProductSchema = new Schema({
   description: { type: String, require: false },
   publishedDate: { type: Date, default: Date.now },
   subspecie: { type: String, require: false },
+  sold: { type: Boolean, require: false },
 });
 
 module.exports = mongoose.model("products", ProductSchema);

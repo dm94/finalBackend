@@ -644,12 +644,15 @@ components:
           format: date
         subspecie:
           type: string
+        sold:
+          type: boolean
       required:
         - _id
         - idPublisher
         - title
         - price
         - type
+      description: Product model
     Message:
       title: Message
       type: object
