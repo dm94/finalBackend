@@ -147,13 +147,16 @@ paths:
               properties:
                 email:
                   type: string
+                  format: email
                 dateOfBirth:
                   type: string
                   format: date
                 password:
                   type: string
+                  minLength: 12
                 username:
                   type: string
+                  minLength: 5
               required:
                 - email
                 - dateOfBirth
@@ -163,7 +166,7 @@ paths:
               Create User Bob Fellow:
                 value:
                   username: pepito
-                  password: asdasdad
+                  password: "asdasasdasddad"
                   email: pepito@gmail.com
                   dateOfBirth: '1996-08-24'
         description: Post the necessary fields for the API to create a new user.
@@ -613,6 +616,7 @@ components:
           climate: string
           type: plant
           description: string
+      description: Product model
       properties:
         _id:
           type: string
@@ -639,6 +643,7 @@ components:
             - insect
         description:
           type: string
+          maxLength: 500
         publishedDate:
           type: string
           format: date
@@ -652,7 +657,6 @@ components:
         - title
         - price
         - type
-      description: Product model
     Message:
       title: Message
       type: object
