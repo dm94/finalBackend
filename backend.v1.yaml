@@ -568,6 +568,8 @@ paths:
       description: Resend message to verify the user
       security:
         - token: []
+      tags:
+        - users
 components:
   schemas:
     User:
