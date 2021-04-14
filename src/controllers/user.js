@@ -1,6 +1,7 @@
 const controller = {};
 const User = require("../models/user");
 const authJWT = require("../auth/jwt");
+const mailerController = require("./mailer");
 
 controller.addUser = async (req, res) => {
   const email = req.body.email;
@@ -51,13 +52,27 @@ controller.userLogin = async (req, res) => {
     return;
   }
 };
+
 controller.getUser = async (req, res) => {
   res.send({ status: "ok", data: req.user });
 };
 
 controller.confirmationEmail = async (req, res) => {};
 
-controller.resendTokenEmail = async (req, res) => {};
+controller.resendTokenEmail = async (req, res) => {
+  let email = "User Email";
+  let token = "fdgdfgdfgdfg";
+  /**
+   * Here generate a new token to send by mail
+   */
+
+  try {
+    let code = await mailerController.sendTokenEmail(email, token);
+    res.status(code).send();
+  } catch (error) {
+    res.status(500).send({ error: "Error al enviar el email" });
+  }
+};
 
 controller.getUserProfile = async (req, res) => {};
 
