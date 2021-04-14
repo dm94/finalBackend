@@ -1,10 +1,9 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const MessageSchema = new Schema({
-  chatID: { type: Schema.Types.ObjectId, ref: "chat" },
-  senderID: { type: String, require: true },
+  chatId: { type: Schema.Types.ObjectId, ref: "chat", required: true },
+  senderId: { type: Schema.Types.ObjectId, ref: "user", required: true },
   text: { type: String, require: true },
   date: { type: Date, default: Date.now },
   hasRead: { type: Boolean, require: false },

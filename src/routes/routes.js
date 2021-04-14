@@ -12,6 +12,8 @@ router.patch("/products/:id", passport.auth, productController.updateProduct);
 router.delete("/products/:id", passport.auth, productController.deleteProduct);
 
 router.post("/login", userController.userLogin);
+router.post("/confirmation", passport.auth, userController.confirmationEmail);
+router.get("/confirmation", passport.auth, userController.resendTokenEmail);
 router.post("/users", userController.addUser);
 router.get("/users", passport.auth, userController.getUser);
 router.patch("/users/:id", passport.auth, userController.updateUser);

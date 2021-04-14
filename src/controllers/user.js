@@ -55,6 +55,10 @@ controller.getUser = async (req, res) => {
   res.send({ status: "ok", data: req.user });
 };
 
+controller.confirmationEmail = async (req, res) => {};
+
+controller.resendTokenEmail = async (req, res) => {};
+
 controller.getUserProfile = async (req, res) => {};
 
 controller.updateUser = async (req, res) => {};

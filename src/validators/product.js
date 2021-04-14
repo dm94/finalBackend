@@ -1,7 +1,7 @@
 const Joi = require("joi");
 
 const schema = Joi.object({
-  idPublisher: Joi.string.required(),
+  publisherId: Joi.string.required(),
   image: Joi.string().uri,
   title: Joi.string().min(5).max(200).required(),
   specie: Joi.string().min(2),
@@ -16,7 +16,7 @@ const schema = Joi.object({
 function validate(body) {
   return schema.validate(
     {
-      idPublisher: body.idPublisher,
+      publisherId: body.idPublisher,
       image: body.image,
       title: body.title,
       specie: body.specie,

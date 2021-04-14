@@ -1,9 +1,8 @@
 const mongoose = require("mongoose");
-const bcrypt = require("bcrypt");
 const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
-  idPublisher: { type: Schema.Types.ObjectId, ref: "user" },
+  publisherId: { type: Schema.Types.ObjectId, ref: "user", required: true },
   image: { type: String, require: false },
   title: { type: String, require: true },
   specie: { type: String, require: false },
