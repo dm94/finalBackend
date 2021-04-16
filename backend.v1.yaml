@@ -7,8 +7,10 @@ info:
     name: Daniel
     url: 'https://github.com/dm94'
 servers:
-  - url: 'http://localhost:3000'
-    description: Localhost
+  - url: 'https://garden-to-yours.herokuapp.com'
+    description: Heroku
+  - description: Localhost
+    url: 'http://localhost:3000'
 tags:
   - name: chat
   - name: users

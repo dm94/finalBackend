@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "Server for final project",
   "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "test": "node app.js"
+  },
   "author": "Daniel Martin",
   "dependencies": {
     "bcrypt": "^5.0.1",
