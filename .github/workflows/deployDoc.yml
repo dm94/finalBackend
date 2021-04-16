@@ -1,0 +1,19 @@
+
+name: Deploy documentation
+on:
+  push:
+    branches:
+      - master
+jobs:
+  deploy-doc:
+    name: Deploy API doc on Bump
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Deploy API documentation
+        uses: bump-sh/github-action@0.2
+        with:
+          doc: 16c9a87e-8b12-44a5-b06a-f47105815888
+          token: ${{secrets.BUMP_TOKEN}}
+          file: backend.v1.yaml
