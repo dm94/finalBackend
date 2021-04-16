@@ -21,25 +21,9 @@ router.delete("/users", passport.auth, userController.deleteUser);
 router.get("/users/:username/profile", userController.getUserProfile);
 
 router.get("/users/:username/chats", passport.auth, chatController.getChats);
-router.post(
-  "/users/:username/chats",
-  passport.auth,
-  chatController.makeNewChat
-);
-router.get(
-  "/users/:username/chats/:chatid",
-  passport.auth,
-  chatController.getMessages
-);
-router.post(
-  "/users/:username/chats/:chatid",
-  passport.auth,
-  chatController.addMessage
-);
-router.delete(
-  "/users/:username/chats/:chatid",
-  passport.auth,
-  chatController.deleteChat
-);
+router.post("/chats", passport.auth, chatController.makeNewChat);
+router.get("/chats/:chatid", passport.auth, chatController.getMessages);
+router.post("/chats/:chatid", passport.auth, chatController.addMessage);
+router.delete("/chats/:chatid", passport.auth, chatController.deleteChat);
 
 module.exports = router;

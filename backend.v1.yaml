@@ -376,7 +376,7 @@ paths:
         - products
       security:
         - token: []
-  '/users/{username}/chats':
+  /chats:
     get:
       summary: Get Messages
       tags:
@@ -396,12 +396,7 @@ paths:
       parameters: []
       security:
         - token: []
-    parameters:
-      - schema:
-          type: string
-        name: username
-        in: path
-        required: true
+    parameters: []
     post:
       summary: New chat
       operationId: makeNewChat
@@ -426,16 +421,11 @@ paths:
         - chat
       security:
         - token: []
-  '/users/{username}/chats/{chatId}':
+  '/chats/{chatId}':
     parameters:
       - schema:
           type: string
         name: chatId
-        in: path
-        required: true
-      - schema:
-          type: string
-        name: username
         in: path
         required: true
     get:
