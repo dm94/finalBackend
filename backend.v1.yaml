@@ -8,6 +8,7 @@ info:
     url: 'https://github.com/dm94'
 servers:
   - url: 'http://localhost:3000'
+    description: Localhost
 tags:
   - name: chat
   - name: users
@@ -499,15 +500,7 @@ paths:
           content:
             application/json:
               schema:
-                description: ''
-                type: object
-                properties:
-                  access_token:
-                    type: string
-                    minLength: 1
-                  expires_in:
-                    type: integer
-                    format: int64
+                $ref: '#/components/schemas/Token'
               examples:
                 example-1:
                   value:
@@ -749,20 +742,33 @@ components:
         - sellerId
         - buyerId
     Token:
-      title: Token
+      description: ''
       type: object
-      description: Token for email validation
       properties:
-        _userId:
-          $ref: '#/components/schemas/User'
-        token:
+        access_token:
           type: string
-        createdAt:
-          type: string
-          format: date
+          minLength: 1
+        expires_in:
+          type: number
+      required:
+        - access_token
+        - expires_in
+      x-examples:
+        example-1:
+          access_token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDc0OGJlYjJhNDE5OTJlN
+          expires_in: 1618856387
   securitySchemes:
     token:
       type: http
       scheme: bearer
+  responses: {}
+  parameters:
+    username:
+      name: username
+      in: path
+      required: true
+      schema:
+        type: string
+      description: User name
 security:
   - token: []
