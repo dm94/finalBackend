@@ -79,7 +79,7 @@ paths:
                   email: pepito@gmail.com
                   dateOfBirth: '1996-08-24'
         description: Post the necessary fields for the API to create a new user.
-      description: Create a new user.
+      description: Works - Create a new user.
       tags:
         - users
       parameters: []
@@ -96,7 +96,7 @@ paths:
                 $ref: '#/components/schemas/User'
         '401':
           description: Unauthorized
-      description: Retrieve the information of the user
+      description: Works - Retrieve the information of the user
       tags:
         - users
       security:
@@ -115,7 +115,7 @@ paths:
         - token: []
       tags:
         - users
-      description: Delete User
+      description: Works - Delete User
     patch:
       summary: Update User Information
       operationId: updateUser
@@ -146,7 +146,7 @@ paths:
           description: User Not Found
         '409':
           description: Email Already Taken
-      description: Update the information of an existing user.
+      description: Not implemented - Update the information of an existing user.
       requestBody:
         content:
           application/json:
@@ -220,7 +220,7 @@ paths:
                     items:
                       $ref: '#/components/schemas/Product'
       operationId: getUserProfile
-      description: Returns the user profile
+      description: Partially works - Returns the user profile
   /products:
     post:
       summary: Add products
@@ -228,7 +228,7 @@ paths:
       responses:
         '201':
           description: Created
-      description: Create a product
+      description: Not implemented - Create a product
       parameters:
         - schema:
             type: string
@@ -304,7 +304,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-      description: 'Returns a list of products. Max: 10 products'
+      description: 'Not implemented -Returns a list of products. Max: 10 products'
       parameters:
         - schema:
             type: string
@@ -343,7 +343,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Product'
       operationId: getProduct
-      description: Returns a product
+      description: Not implemented - Returns a product
     patch:
       summary: Update Product
       operationId: updateProduct
@@ -356,7 +356,7 @@ paths:
           in: query
           name: User token
           description: Generated access token
-      description: Allows product data to be updated
+      description: Not implemented -Allows product data to be updated
       tags:
         - products
       security:
@@ -367,7 +367,7 @@ paths:
       responses:
         '204':
           description: No Content
-      description: Allows the deletion of a product
+      description: Not implemented - Allows the deletion of a product
       parameters:
         - schema:
             type: string
@@ -394,7 +394,7 @@ paths:
                   $ref: '#/components/schemas/Chat'
               examples: {}
       operationId: getChats
-      description: Returns chats from a user
+      description: Not implemented - Returns chats from a user
       parameters: []
       security:
         - token: []
@@ -418,7 +418,7 @@ paths:
           name: message
           description: First message
           required: true
-      description: Create a chat with another user
+      description: Not implemented - Create a chat with another user
       tags:
         - chat
       security:
@@ -451,7 +451,7 @@ paths:
                       date: '2019-08-24T14:15:22Z'
                       hasRead: true
       operationId: getMessages
-      description: Return messages from a chat
+      description: Not implemented - Return messages from a chat
       tags:
         - chat
       parameters: []
@@ -464,7 +464,7 @@ paths:
         '201':
           description: Created
       parameters: []
-      description: Add a message to a chat
+      description: Not implemented - Add a message to a chat
       tags:
         - chat
       security:
@@ -475,7 +475,7 @@ paths:
       responses:
         '204':
           description: No Content
-      description: Hides the chat until both parties delete the chat
+      description: Not implemented - Hides the chat until both parties delete the chat
       parameters: []
       tags:
         - chat
@@ -502,7 +502,7 @@ paths:
           description: Faltan datos
         '401':
           description: Credenciales incorrectas
-      description: Returns a temporary access token
+      description: Works - Returns a temporary access token
       parameters: []
       tags:
         - users
@@ -533,6 +533,7 @@ paths:
         '200':
           description: OK
       description: |-
+        Not implemented
         Used to validate a user's email.
         If the email is not validated you will not be able to create products or send messages.
       security:
@@ -552,7 +553,7 @@ paths:
       responses:
         '200':
           description: OK
-      description: Resend message to verify the user
+      description: Not implemented - Resend message to verify the user
       security:
         - token: []
       tags:
