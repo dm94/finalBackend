@@ -6,6 +6,8 @@ const mailerController = require("./mailer");
 controller.addUser = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
+  const username = req.body.username;
+  const dateOfBirth = req.body.dateOfBirth;
 
   if (!email || !password) {
     res.status(400).send();
@@ -13,13 +15,24 @@ controller.addUser = async (req, res) => {
   }
 
   try {
-    const user = new User({ email: email, password: password });
+    const other = await User.findOne({ email: email });
+    if (other) {
+      res.status(409).send("Ese correo ya existe");
+      return;
+    }
+
+    const user = new User({
+      email: email,
+      password: password,
+      username: username,
+      dateOfBirth: dateOfBirth,
+    });
     await user.save();
     const data = await User.findOne({ email: email });
-    res.send({ status: "ok", data: data });
+    res.status(201).send(data);
   } catch (err) {
     console.log(err);
-    res.status(500).send(err.message);
+    res.status(409).send("Ese nick ya existe");
   }
 };
 
@@ -27,7 +40,7 @@ controller.userLogin = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
-    res.status(401).send("Credenciales incorrectas");
+    res.status(400).send("Faltan datos");
   }
   try {
     const user = await User.findOne({ email: email });
@@ -54,7 +67,7 @@ controller.userLogin = async (req, res) => {
 };
 
 controller.getUser = async (req, res) => {
-  res.send({ status: "ok", data: req.user });
+  res.send(req.user);
 };
 
 controller.confirmationEmail = async (req, res) => {};
@@ -62,6 +75,7 @@ controller.confirmationEmail = async (req, res) => {};
 controller.resendTokenEmail = async (req, res) => {
   let email = "User Email";
   let token = "fdgdfgdfgdfg";
+
   /**
    * Here generate a new token to send by mail
    */
@@ -74,10 +88,32 @@ controller.resendTokenEmail = async (req, res) => {
   }
 };
 
-controller.getUserProfile = async (req, res) => {};
+controller.getUserProfile = async (req, res) => {
+  const userProfile = req.params.username;
+
+  const userData = await User.findOne({ username: userProfile }).select(
+    "username createDate firstName -_id"
+  );
+  console.log(userData);
+  let profile = userData;
+
+  /* Here we will make a request for product information */
+
+  profile.products = [];
+
+  res.status(200).send(profile);
+};
 
 controller.updateUser = async (req, res) => {};
 
-controller.deleteUser = async (req, res) => {};
+controller.deleteUser = async (req, res) => {
+  try {
+    await User.findByIdAndDelete(req.user);
+    res.status(204).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).send("No se ha podido borrar el usuario");
+  }
+};
 
 module.exports = controller;

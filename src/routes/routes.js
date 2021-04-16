@@ -16,24 +16,28 @@ router.post("/confirmation", passport.auth, userController.confirmationEmail);
 router.get("/confirmation", passport.auth, userController.resendTokenEmail);
 router.post("/users", userController.addUser);
 router.get("/users", passport.auth, userController.getUser);
-router.patch("/users/:id", passport.auth, userController.updateUser);
-router.delete("/users/:id", passport.auth, userController.deleteUser);
-router.get("/users/:id/profile", userController.getUserProfile);
+router.patch("/users", passport.auth, userController.updateUser);
+router.delete("/users", passport.auth, userController.deleteUser);
+router.get("/users/:username/profile", userController.getUserProfile);
 
-router.get("/users/:id/chats", passport.auth, chatController.getChats);
-router.post("/users/:id/chats", passport.auth, chatController.makeNewChat);
+router.get("/users/:username/chats", passport.auth, chatController.getChats);
+router.post(
+  "/users/:username/chats",
+  passport.auth,
+  chatController.makeNewChat
+);
 router.get(
-  "/users/:id/chats/:chatid",
+  "/users/:username/chats/:chatid",
   passport.auth,
   chatController.getMessages
 );
 router.post(
-  "/users/:id/chats/:chatid",
+  "/users/:username/chats/:chatid",
   passport.auth,
   chatController.addMessage
 );
 router.delete(
-  "/users/:id/chats/:chatid",
+  "/users/:username/chats/:chatid",
   passport.auth,
   chatController.deleteChat
 );

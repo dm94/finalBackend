@@ -14,14 +14,105 @@ tags:
   - name: products
   - name: token
 paths:
-  '/users/{userId}':
-    parameters:
-      - schema:
-          type: integer
-        name: userId
-        in: path
-        required: true
-        description: Id of an existing user.
+  /users:
+    post:
+      summary: Create New User
+      operationId: addUser
+      responses:
+        '201':
+          description: User Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              examples:
+                example-1:
+                  value:
+                    firstName: string
+                    lastName: string
+                    email: user@example.com
+                    dateOfBirth: '1997-10-31'
+                    emailVerified: true
+                    createDate: '2019-08-24'
+                    image: 'http://example.com'
+                    location: string
+                    lastConectionDate: '2019-08-24T14:15:22Z'
+                    token: string
+                    username: string
+                    password: pa$$word
+                    _id: sadfs
+        '400':
+          description: Missing Required Information
+        '409':
+          description: Ese correo ya existe
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                dateOfBirth:
+                  type: string
+                  format: date
+                password:
+                  type: string
+                  minLength: 12
+                username:
+                  type: string
+                  minLength: 5
+              required:
+                - email
+                - dateOfBirth
+                - password
+                - username
+            examples:
+              Create User:
+                value:
+                  username: pepito
+                  password: asdasasdasddad
+                  email: pepito@gmail.com
+                  dateOfBirth: '1996-08-24'
+        description: Post the necessary fields for the API to create a new user.
+      description: Create a new user.
+      tags:
+        - users
+      parameters: []
+    parameters: []
+    get:
+      summary: ''
+      operationId: getUser
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized
+      description: Retrieve the information of the user
+      tags:
+        - users
+      security:
+        - token: []
+    delete:
+      summary: ''
+      operationId: deleteUser
+      responses:
+        '204':
+          description: User deleted
+        '401':
+          description: Unauthorized
+        '500':
+          description: No se ha podido borrar el usuario
+      security:
+        - token: []
+      tags:
+        - users
+      description: Delete User
     patch:
       summary: Update User Information
       operationId: updateUser
@@ -96,108 +187,13 @@ paths:
         - users
       security:
         - token: []
-    delete:
-      summary: Delete User
-      operationId: deleteUser
-      responses:
-        '200':
-          description: OK
-      description: Delete User
-      parameters: []
-      tags:
-        - users
-      security:
-        - token: []
-  /users:
-    post:
-      summary: Create New User
-      operationId: addUser
-      responses:
-        '201':
-          description: User Created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-              examples:
-                example-1:
-                  value:
-                    firstName: string
-                    lastName: string
-                    email: user@example.com
-                    dateOfBirth: '1997-10-31'
-                    emailVerified: true
-                    createDate: '2019-08-24'
-                    image: 'http://example.com'
-                    location: string
-                    lastConectionDate: '2019-08-24T14:15:22Z'
-                    token: string
-                    username: string
-                    password: pa$$word
-                    _id: sadfs
-        '400':
-          description: Missing Required Information
-        '409':
-          description: Email Already Taken
-      requestBody:
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                email:
-                  type: string
-                  format: email
-                dateOfBirth:
-                  type: string
-                  format: date
-                password:
-                  type: string
-                  minLength: 12
-                username:
-                  type: string
-                  minLength: 5
-              required:
-                - email
-                - dateOfBirth
-                - password
-                - username
-            examples:
-              Create User Bob Fellow:
-                value:
-                  username: pepito
-                  password: asdasasdasddad
-                  email: pepito@gmail.com
-                  dateOfBirth: '1996-08-24'
-        description: Post the necessary fields for the API to create a new user.
-      description: Create a new user.
-      tags:
-        - users
-      parameters: []
-    parameters: []
-    get:
-      summary: ''
-      operationId: getUser
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
-        '401':
-          description: Unauthorized
-      description: Retrieve the information of the user
-      tags:
-        - users
-  '/users/{userId}/profile':
+  '/users/{username}/profile':
     parameters:
       - schema:
           type: string
-        name: userId
+        name: username
         in: path
         required: true
-        description: Id of an existing user.
     get:
       summary: Get Profile
       tags:
@@ -210,8 +206,8 @@ paths:
               schema:
                 type: object
                 properties:
-                  userID:
-                    type: integer
+                  username:
+                    type: string
                   firstName:
                     type: string
                   location:
@@ -379,7 +375,7 @@ paths:
         - products
       security:
         - token: []
-  '/users/{userId}/chats':
+  '/users/{username}/chats':
     get:
       summary: Get Messages
       tags:
@@ -402,7 +398,7 @@ paths:
     parameters:
       - schema:
           type: string
-        name: userId
+        name: username
         in: path
         required: true
     post:
@@ -429,16 +425,16 @@ paths:
         - chat
       security:
         - token: []
-  '/users/{userId}/chats/{chatId}':
+  '/users/{username}/chats/{chatId}':
     parameters:
       - schema:
           type: string
-        name: userId
+        name: chatId
         in: path
         required: true
       - schema:
           type: string
-        name: chatId
+        name: username
         in: path
         required: true
     get:
@@ -512,32 +508,38 @@ paths:
                   expires_in:
                     type: integer
                     format: int64
-                required:
-                  - access_token
-                  - expires_in
               examples:
                 example-1:
                   value:
                     access_token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDc0OGJlYjJhNDE5OTJlN
                     expires_in: 1618856387
         '400':
-          description: Missing parameters
+          description: Faltan datos
         '401':
-          description: Unauthorized
+          description: Credenciales incorrectas
       description: Returns a temporary access token
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: email
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: password
-          required: true
+      parameters: []
       tags:
         - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                email:
+                  type: string
+                  format: email
+                password:
+                  type: string
+              required:
+                - email
+                - password
+            examples:
+              example-1:
+                value:
+                  email: pepito@gmail.com
+                  password: asdasdad
   /confirmation:
     post:
       summary: ''

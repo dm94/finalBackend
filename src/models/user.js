@@ -9,7 +9,7 @@ const UserSchema = new Schema({
   username: { type: String, require: true, unique: true },
   lastName: { type: String, require: false },
   dateOfBirth: { type: Date, require: false },
-  emailVerified: { type: Boolean, require: false },
+  emailVerified: { type: Boolean, default: false },
   createDate: { type: Date, default: Date.now },
   image: { type: String, require: false },
   location: { type: String, require: false },
