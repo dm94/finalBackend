@@ -10,19 +10,18 @@ const emailObj = new Email({
 });
 
 controller.sendTokenEmail = async (email, token) => {
-  /**
-   * Here generate a new token to send by mail
-   */
-
   try {
     const subject = "Verifica tu correo en nuestra web";
     const locals = { token: token };
-    const html = await emailObj.render("emailVerification.pug", locals);
+    const text = "Tu codigo de verificación de la cuenta es " + token;
 
-    await mailer.send(subject, email, html);
+    const html = await emailObj.render("emailVerification.pug", locals);
+    await mailer.send(subject, email, text, html);
     return 204;
   } catch (error) {
     console.log(error);
     return 500;
   }
 };
+
+module.exports = controller;

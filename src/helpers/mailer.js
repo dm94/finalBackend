@@ -2,26 +2,43 @@ const helper = {};
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
-const transport = nodemailer.createTransport({
-  service: process.env.MAIL_SERVICE,
-  auth: {
-    user: process.env.MAIL_USER,
-    pass: process.env.MAIL_PASS,
-  },
-});
+let transport = null;
 
-helper.send = (subject, to, html) => {
+if (process.env.MAIL_TEST_SERVER) {
+  nodemailer.createTestAccount((err, account) => {
+    if (err) {
+      console.error("Failed to create a testing account. " + err.message);
+    }
+    transport = nodemailer.createTransport({
+      host: account.smtp.host,
+      port: account.smtp.port,
+      secure: account.smtp.secure,
+      auth: {
+        user: account.user,
+        pass: account.pass,
+      },
+    });
+  });
+} else {
+  transport = nodemailer.createTransport({
+    service: process.env.MAIL_SERVICE,
+    auth: {
+      user: process.env.MAIL_USER,
+      pass: process.env.MAIL_PASS,
+    },
+  });
+}
+
+helper.send = (subject, to, text, html) => {
   return new Promise((resolve, reject) => {
     try {
       const from = process.env.MAIL_DIRECTION;
-      transport.sendMail({ from, subject, to, html }, (error, info) => {
+      transport.sendMail({ from, subject, to, text, html }, (error, info) => {
         if (error) {
-          console.log("errorSendingEmail: " + JSON.stringify(error));
           reject(error);
           return;
         }
 
-        console.log("emailSent: " + JSON.stringify(info));
         resolve(info);
       });
     } catch (error) {
