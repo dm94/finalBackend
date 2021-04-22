@@ -24,21 +24,29 @@ controller.addUser = async (req, res) => {
       return;
     }
 
-    const user = new User({
-      email: email,
-      password: password,
-      username: username,
-      dateOfBirth: dateOfBirth,
-    });
-    await user.save();
-    const data = await User.findOne({ email: email });
-    let token = new Token({
-      _userId: data._id,
-      token: crypto.randomBytes(16).toString("hex"),
-    });
-    await token.save();
-    mailerController.sendTokenEmail(email, token.token);
-    res.status(201).send(data);
+    let validation = userValidator.validatePass(email);
+
+    if (validation == null || validation.error) {
+      const error = validation.error.details[0].message;
+      res.status(400).send(error);
+      return;
+    } else {
+      const user = new User({
+        email: email,
+        password: password,
+        username: username,
+        dateOfBirth: dateOfBirth,
+      });
+      await user.save();
+      const data = await User.findOne({ email: email });
+      let token = new Token({
+        _userId: data._id,
+        token: crypto.randomBytes(16).toString("hex"),
+      });
+      await token.save();
+      mailerController.sendTokenEmail(email, token.token);
+      res.status(201).send(data);
+    }
   } catch (err) {
     console.log(err);
     res.status(409).send("This nickname already exists");

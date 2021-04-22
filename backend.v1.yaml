@@ -151,7 +151,7 @@ paths:
         '503':
           description: Service Unavailable
       description: |-
-        Implemented - Update the information of an existing user.
+        Works - Update the information of an existing user.
         action:
         updateimage - To update the image
         updateprofile - To update firstName, lastName and location
@@ -166,8 +166,12 @@ paths:
               properties:
                 firstName:
                   type: string
+                  minLength: 2
+                  maxLength: 20
                 lastName:
                   type: string
+                  minLength: 2
+                  maxLength: 20
                 email:
                   type: string
                   description: 'If a new email is given, the user''s email verified property will be set to false.'
@@ -175,26 +179,33 @@ paths:
                 dateOfBirth:
                   type: string
                   format: date
+                location:
+                  type: string
                 image:
                   type: string
                   format: uri
-                location:
+                password:
                   type: string
+                  maxLength: 25
+                  minLength: 8
             examples:
-              Update public info:
+              updateprofile:
                 value:
                   firstName: Pepito
                   lastName: De los palotes
                   location: Talavera de la Reina
-              Date of Birth:
+              updatedate:
                 value:
                   dateOfBirth: '1985-10-02'
-              Update Image:
+              updateimage:
                 value:
                   image: 'https://dominio.com/imagen/dasda.jpg'
-              Update Email:
+              updateemail:
                 value:
                   email: newemail@hotmail.es
+              updatepass:
+                value:
+                  password: newpassword
         description: Patch user properties to update.
       parameters:
         - schema:
@@ -560,7 +571,7 @@ paths:
         '405':
           description: This user has already been verified
       description: |-
-        Implemented
+        Works
         Used to validate a user's email.
         If the email is not validated you will not be able to create products or send messages.
       security:
@@ -590,7 +601,7 @@ paths:
       responses:
         '200':
           description: OK
-      description: Implemented - Resend message to verify the user
+      description: Works - Resend message to verify the user
       security:
         - token: []
       tags:
