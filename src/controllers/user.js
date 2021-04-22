@@ -3,6 +3,7 @@ const User = require("../models/user");
 const Token = require("../models/token");
 const authJWT = require("../auth/jwt");
 const mailerController = require("./mailer");
+const userValidator = require("../validators/user");
 const crypto = require("crypto");
 
 controller.addUser = async (req, res) => {
@@ -19,7 +20,7 @@ controller.addUser = async (req, res) => {
   try {
     const other = await User.findOne({ email: email });
     if (other) {
-      res.status(409).send("Ese correo ya existe");
+      res.status(409).send("This email already exists");
       return;
     }
 
@@ -40,7 +41,7 @@ controller.addUser = async (req, res) => {
     res.status(201).send(data);
   } catch (err) {
     console.log(err);
-    res.status(409).send("Ese nick ya existe");
+    res.status(409).send("This nickname already exists");
   }
 };
 
@@ -134,7 +135,63 @@ controller.getUserProfile = async (req, res) => {
 };
 
 controller.updateUser = async (req, res) => {
-  res.status(200).send();
+  let user = req.user;
+
+  if (req.query.action != null) {
+    let validation = null;
+
+    if (req.query.action == "updateimage") {
+      validation = userValidator.validateImage(req.body);
+      user.image = req.body.image;
+    } else if (req.query.action == "updateprofile") {
+      validation = userValidator.validateProfile(req.body);
+      user.firstName = req.body.firstName;
+      user.lastName = req.body.lastName;
+      user.location = req.body.location;
+    } else if (req.query.action == "updatedate") {
+      validation = userValidator.validateDate(req.body);
+      user.dateOfBirth = req.body.dateOfBirth;
+    } else if (req.query.action == "updateemail") {
+      validation = userValidator.validateEmail(req.body);
+      try {
+        const other = await User.findOne({ email: email });
+        if (other) {
+          res.status(409).send("This email already exists");
+          return;
+        }
+        let token = new Token({
+          _userId: user._id,
+          token: crypto.randomBytes(16).toString("hex"),
+        });
+        await token.save();
+        mailerController.sendTokenEmail(email, token.token);
+      } catch (err) {
+        res.status(503).send("Service Unavailable");
+        return;
+      }
+      user.email = req.body.email;
+      user.emailVerified = false;
+    } else if (req.query.action == "updatepass") {
+      validation = userValidator.validateEmail(req.body);
+      user.password = req.body.password;
+    }
+
+    if (validation == null || validation.error) {
+      const error = validation.error.details[0].message;
+      res.status(400).send(error);
+      return;
+    } else {
+      user.save(function (err) {
+        if (err) {
+          return res.status(500).send({ msg: err.message });
+        }
+        Token.findByIdAndDelete(token);
+        res.status(200).send("User update");
+      });
+    }
+  } else {
+    res.status(400).send();
+  }
 };
 
 controller.deleteUser = async (req, res) => {
