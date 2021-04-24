@@ -376,8 +376,12 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Product'
+        '400':
+          description: Missing data
+        '404':
+          description: Product not found
       operationId: getProduct
-      description: Not implemented - Returns a product
+      description: Implemented - Returns a product
     patch:
       summary: Update Product
       operationId: updateProduct
@@ -401,7 +405,15 @@ paths:
       responses:
         '204':
           description: No Content
-      description: Not implemented - Allows the deletion of a product
+        '400':
+          description: Missing data
+        '401':
+          description: Unauthorized
+        '404':
+          description: Product not found
+        '500':
+          description: Product could not be deleted
+      description: Implemented - Allows the deletion of a product
       parameters:
         - schema:
             type: string

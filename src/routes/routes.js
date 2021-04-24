@@ -7,7 +7,7 @@ const passport = require("../auth/auth");
 
 router.get("/products", productController.getProducts);
 router.post("/products", passport.auth, productController.addProduct);
-router.post("/products/:id", productController.getProduct);
+router.get("/products/:id", productController.getProduct);
 router.patch("/products/:id", passport.auth, productController.updateProduct);
 router.delete("/products/:id", passport.auth, productController.deleteProduct);
 
