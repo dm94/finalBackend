@@ -618,6 +618,65 @@ paths:
         - token: []
       tags:
         - users
+  /categories:
+    get:
+      summary: Your GET endpoint
+      tags: []
+      responses: {}
+      operationId: getCategories
+      description: Returns a list of categories with different filters
+      parameters:
+        - schema:
+            type: string
+            enum:
+              - plant
+              - insect
+          in: query
+          name: type
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: category
+          description: 'If you add it, it returns its subcategories'
+    post:
+      summary: ''
+      operationId: addCategory
+      responses:
+        '201':
+          description: Created
+      description: Add a new category
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                type:
+                  type: string
+                  enum:
+                    - plant
+                    - insect
+                category:
+                  type: string
+                subcategory:
+                  type: string
+              required:
+                - type
+                - category
+            examples:
+              example-1:
+                value:
+                  type: plant
+                  category: Cactus
+        description: 'This would create such a category: Type: Plant -> Category: Cactus -> Subcategory: Other'
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: apiKey
+          required: true
+          description: Token defined on the server to be able to perform administration tasks
 components:
   schemas:
     User:
@@ -703,14 +762,11 @@ components:
         _id:
           type: string
         publisherId:
-          type: string
-          description: User ID
+          $ref: '#/components/schemas/User'
         image:
           type: string
           format: uri
         title:
-          type: string
-        specie:
           type: string
         size:
           type: string
@@ -729,10 +785,10 @@ components:
         publishedDate:
           type: string
           format: date
-        subspecie:
-          type: string
         sold:
           type: boolean
+        category:
+          $ref: '#/components/schemas/Category'
       required:
         - _id
         - publisherId
@@ -812,6 +868,26 @@ components:
         example-1:
           access_token: yJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiI2MDc0OGJlYjJhNDE5OTJlN
           expires_in: 1618856387
+    Category:
+      title: Category
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - plant
+            - insect
+        category:
+          type: string
+          minLength: 2
+          maxLength: 20
+        subcategory:
+          type: string
+          minLength: 2
+          maxLength: 20
+      required:
+        - type
+        - category
   securitySchemes:
     token:
       type: http
@@ -825,5 +901,14 @@ components:
       schema:
         type: string
       description: User name
+    type:
+      name: type
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+          - plant
+          - insect
 security:
   - token: []
