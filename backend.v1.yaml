@@ -621,8 +621,11 @@ paths:
   /categories:
     get:
       summary: Your GET endpoint
-      tags: []
-      responses: {}
+      tags:
+        - products
+      responses:
+        '200':
+          description: OK
       operationId: getCategories
       description: Returns a list of categories with different filters
       parameters:
@@ -677,6 +680,8 @@ paths:
           name: apiKey
           required: true
           description: Token defined on the server to be able to perform administration tasks
+      tags:
+        - products
 components:
   schemas:
     User:
