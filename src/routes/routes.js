@@ -12,8 +12,13 @@ router.get("/products/:id", productController.getProduct);
 router.patch("/products/:id", passport.auth, productController.updateProduct);
 router.delete("/products/:id", passport.auth, productController.deleteProduct);
 
-router.get("/products", categoryController.getCategories);
-router.post("/products", passport.auth, categoryController.addCategory);
+router.get("/categories", categoryController.getCategories);
+router.post("/categories", passport.auth, categoryController.addCategory);
+router.delete(
+  "/categories/:categoryId",
+  passport.auth,
+  categoryController.deleteCategory
+);
 
 router.post("/login", userController.userLogin);
 router.post("/confirmation", passport.auth, userController.confirmationEmail);

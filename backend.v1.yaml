@@ -16,6 +16,7 @@ tags:
   - name: users
   - name: products
   - name: token
+  - name: category
 paths:
   /users:
     post:
@@ -621,13 +622,11 @@ paths:
   /categories:
     get:
       summary: Your GET endpoint
-      tags:
-        - products
       responses:
         '200':
           description: OK
       operationId: getCategories
-      description: Returns a list of categories with different filters
+      description: Implemented - Returns a list of categories with different filters
       parameters:
         - schema:
             type: string
@@ -642,13 +641,19 @@ paths:
           in: query
           name: category
           description: 'If you add it, it returns its subcategories'
+      tags:
+        - category
     post:
       summary: ''
       operationId: addCategory
       responses:
         '201':
           description: Created
-      description: Add a new category
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+      description: Implemented - Add a new category
       requestBody:
         content:
           application/json:
@@ -681,7 +686,34 @@ paths:
           required: true
           description: Token defined on the server to be able to perform administration tasks
       tags:
-        - products
+        - category
+  '/categories/{categoryId}':
+    parameters:
+      - schema:
+          type: string
+        name: categoryId
+        in: path
+        required: true
+    delete:
+      summary: ''
+      operationId: deleteCategory
+      responses:
+        '204':
+          description: No Content
+        '401':
+          description: Unauthorized
+        '500':
+          description: Category could not be deleted
+      tags:
+        - category
+      description: Implemented - Use to delete a category
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: apiKey
+          description: Token defined on the server to be able to perform administration tasks
+          required: true
 components:
   schemas:
     User:
