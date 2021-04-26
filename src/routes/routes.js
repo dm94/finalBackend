@@ -2,6 +2,7 @@ const express = require("express");
 const userController = require("../controllers/user");
 const productController = require("../controllers/product");
 const chatController = require("../controllers/chat");
+const categoryController = require("../controllers/category");
 const router = express.Router();
 const passport = require("../auth/auth");
 
@@ -10,6 +11,9 @@ router.post("/products", passport.auth, productController.addProduct);
 router.get("/products/:id", productController.getProduct);
 router.patch("/products/:id", passport.auth, productController.updateProduct);
 router.delete("/products/:id", passport.auth, productController.deleteProduct);
+
+router.get("/products", categoryController.getCategories);
+router.post("/products", passport.auth, categoryController.addCategory);
 
 router.post("/login", userController.userLogin);
 router.post("/confirmation", passport.auth, userController.confirmationEmail);

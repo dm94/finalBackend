@@ -1,9 +1,13 @@
 const controller = {};
 const Product = require("../models/product");
 
-controller.getProducts = async (req, res) => {};
+controller.getProducts = async (req, res) => {
+  res.status(501).send();
+};
 
-controller.addProduct = async (req, res) => {};
+controller.addProduct = async (req, res) => {
+  res.status(501).send();
+};
 
 controller.getProduct = async (req, res) => {
   const productId = req.params.id;
@@ -18,7 +22,9 @@ controller.getProduct = async (req, res) => {
   }
 };
 
-controller.updateProduct = async (req, res) => {};
+controller.updateProduct = async (req, res) => {
+  res.status(501).send();
+};
 
 controller.deleteProduct = async (req, res) => {
   const productId = req.params.id;

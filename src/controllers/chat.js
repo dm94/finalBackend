@@ -1,16 +1,25 @@
 const controller = {};
 const Chat = require("../models/chat");
 const Message = require("../models/message");
-const authJWT = require("../auth/jwt");
 
-controller.getChats = async (req, res) => {};
+controller.getChats = async (req, res) => {
+  res.status(501).send();
+};
 
-controller.makeNewChat = async (req, res) => {};
+controller.makeNewChat = async (req, res) => {
+  res.status(501).send();
+};
 
-controller.getMessages = async (req, res) => {};
+controller.getMessages = async (req, res) => {
+  res.status(501).send();
+};
 
-controller.addMessage = async (req, res) => {};
+controller.addMessage = async (req, res) => {
+  res.status(501).send();
+};
 
-controller.deleteChat = async (req, res) => {};
+controller.deleteChat = async (req, res) => {
+  res.status(501).send();
+};
 
 module.exports = controller;
