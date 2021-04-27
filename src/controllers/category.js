@@ -3,7 +3,14 @@ const Category = require("../models/category");
 require("dotenv").config();
 
 controller.getCategories = async (req, res) => {
-  const categories = await Category.find();
+  const type = req.query.type;
+  const category = req.query.category;
+  let query = {};
+  if (type != null) {
+    query.type = type;
+  }
+
+  const categories = await Category.find(query);
   res.json(categories);
 };
 

@@ -625,6 +625,68 @@ paths:
       responses:
         '200':
           description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                description: ''
+                minItems: 1
+                uniqueItems: true
+                items:
+                  $ref: '#/components/schemas/Category'
+              examples:
+                example-1:
+                  value:
+                    - _id: 60883d518a1c16666c8f08bf
+                      type: plant
+                      category: Cactus
+                      __v: 0
+                    - _id: 60883d778a1c16666c8f08c0
+                      type: plant
+                      category: Otra Planta
+                      __v: 0
+                    - _id: 60883dd68a1c16666c8f08c1
+                      type: plant
+                      category: Plantas de interior
+                      __v: 0
+                    - _id: 60883de38a1c16666c8f08c2
+                      type: plant
+                      category: Plantas de exterior
+                      __v: 0
+                    - _id: 60883ded8a1c16666c8f08c3
+                      type: plant
+                      category: Árboles y Arbustos
+                      __v: 0
+                    - _id: 60883e168a1c16666c8f08c4
+                      type: plant
+                      category: Plantas de flor
+                      subcategory: Semillas
+                      __v: 0
+                    - _id: 60883e1a8a1c16666c8f08c5
+                      type: plant
+                      category: Plantas de flor
+                      subcategory: Bulbos
+                      __v: 0
+                    - _id: 60883e298a1c16666c8f08c6
+                      type: plant
+                      category: Plantas hortícolas
+                      subcategory: Semillas
+                      __v: 0
+                    - _id: 60883e308a1c16666c8f08c7
+                      type: plant
+                      category: Plantas hortícolas
+                      subcategory: Plantulas
+                      __v: 0
+                    - _id: 60883e3c8a1c16666c8f08c8
+                      type: plant
+                      category: Cactus y suculentas
+                      subcategory: Cactus
+                      __v: 0
+                    - _id: 60883e438a1c16666c8f08c9
+                      type: plant
+                      category: Cactus y suculentas
+                      subcategory: Suculentas
+                      __v: 0
       operationId: getCategories
       description: Implemented - Returns a list of categories with different filters
       parameters:
@@ -636,11 +698,6 @@ paths:
           in: query
           name: type
           required: true
-        - schema:
-            type: string
-          in: query
-          name: category
-          description: 'If you add it, it returns its subcategories'
       tags:
         - category
     post:
@@ -687,6 +744,8 @@ paths:
           description: Token defined on the server to be able to perform administration tasks
       tags:
         - category
+      security:
+        - token: []
   '/categories/{categoryId}':
     parameters:
       - schema:
@@ -714,6 +773,8 @@ paths:
           name: apiKey
           description: Token defined on the server to be able to perform administration tasks
           required: true
+      security:
+        - token: []
 components:
   schemas:
     User:
