@@ -10,7 +10,7 @@ controller.getProducts = async (req, res) => {
 controller.addProduct = async (req, res) => {
   let validation = productValidator.validate(req.body);
   if (validation == null || validation.error) {
-    res.status(400).send(validation.error.details[0].message);
+    return res.status(400).send(validation.error.details[0].message);
   } else {
     const publisher = req.user;
 
@@ -46,7 +46,7 @@ controller.addProduct = async (req, res) => {
 controller.getProduct = async (req, res) => {
   const productId = req.params.id;
   if (!productId) {
-    res.status(400).send("Missing data");
+    return res.status(400).send("Missing data");
   }
   const product = await Product.findOne({ _id: productId });
   if (!product) {
@@ -63,7 +63,7 @@ controller.updateProduct = async (req, res) => {
 controller.deleteProduct = async (req, res) => {
   const productId = req.params.id;
   if (!productId) {
-    res.status(400).send("Missing data");
+    return res.status(400).send("Missing data");
   }
   const product = await Product.findOne({ _id: productId });
   if (!product) {

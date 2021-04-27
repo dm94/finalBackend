@@ -4,6 +4,7 @@ const Token = require("../models/token");
 const authJWT = require("../auth/jwt");
 const mailerController = require("./mailer");
 const userValidator = require("../validators/user");
+const Product = require("../models/product");
 const crypto = require("crypto");
 
 controller.addUser = async (req, res) => {
@@ -13,23 +14,20 @@ controller.addUser = async (req, res) => {
   const dateOfBirth = req.body.dateOfBirth;
 
   if (!email || !password) {
-    res.status(400).send();
-    return;
+    return res.status(400).send();
   }
 
   try {
     const other = await User.findOne({ email: email });
     if (other) {
-      res.status(409).send("This email already exists");
-      return;
+      return res.status(409).send("This email already exists");
     }
 
     let validation = userValidator.validatePass(email);
 
     if (validation == null || validation.error) {
       const error = validation.error.details[0].message;
-      res.status(400).send(error);
-      return;
+      return res.status(400).send(error);
     } else {
       const user = new User({
         email: email,
@@ -57,19 +55,17 @@ controller.userLogin = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
-    res.status(400).send("Missing data");
+    return res.status(400).send("Missing data");
   }
   try {
     const user = await User.findOne({ email: email });
     if (!user) {
-      res.status(401).send("Incorrect credentials");
-      return;
+      return res.status(401).send("Incorrect credentials");
     }
 
     const validate = await user.isValidPassword(password);
     if (!validate) {
-      res.status(401).send("Incorrect credentials");
-      return;
+      return res.status(401).send("Incorrect credentials");
     }
     const dataToken = authJWT.createToken(user);
     return res.send({
@@ -79,7 +75,6 @@ controller.userLogin = async (req, res) => {
   } catch (err) {
     console.log(err);
     res.status(401).send("Incorrect credentials");
-    return;
   }
 };
 
@@ -131,13 +126,24 @@ controller.getUserProfile = async (req, res) => {
   const userProfile = req.params.username;
 
   const userData = await User.findOne({ username: userProfile }).select(
-    "username createDate firstName -_id"
+    "_id username createDate firstName"
   );
-  let profile = userData;
 
-  /* Here we will make a request for product information */
+  if (!userData) {
+    return res.status(404).send();
+  }
 
-  profile.products = [];
+  let products = await Product.find({
+    publisherId: userData._id,
+  });
+
+  let profile = {
+    _id: userData._id,
+    username: userData.username,
+    createDate: userData.createDate,
+    firstName: userData.firstName,
+    products: products,
+  };
 
   res.status(200).send(profile);
 };
@@ -164,8 +170,7 @@ controller.updateUser = async (req, res) => {
       try {
         const other = await User.findOne({ email: email });
         if (other) {
-          res.status(409).send("This email already exists");
-          return;
+          return res.status(409).send("This email already exists");
         }
         let token = new Token({
           _userId: user._id,
@@ -174,8 +179,7 @@ controller.updateUser = async (req, res) => {
         await token.save();
         mailerController.sendTokenEmail(email, token.token);
       } catch (err) {
-        res.status(503).send("Service Unavailable");
-        return;
+        return res.status(503).send("Service Unavailable");
       }
       user.email = req.body.email;
       user.emailVerified = false;
@@ -186,8 +190,7 @@ controller.updateUser = async (req, res) => {
 
     if (validation == null || validation.error) {
       const error = validation.error.details[0].message;
-      res.status(400).send(error);
-      return;
+      return res.status(400).send(error);
     } else {
       user.save(function (err) {
         if (err) {

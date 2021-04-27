@@ -254,8 +254,10 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Product'
+        '404':
+          description: Not Found
       operationId: getUserProfile
-      description: Partially works - Returns the user profile
+      description: Works - Returns the user profile
   /products:
     post:
       summary: Add products

@@ -4,7 +4,6 @@ require("dotenv").config();
 
 controller.getCategories = async (req, res) => {
   const type = req.query.type;
-  const category = req.query.category;
   let query = {};
   if (type != null) {
     query.type = type;
