@@ -1,12 +1,46 @@
 const controller = {};
 const Product = require("../models/product");
+const Category = require("../models/category");
+const productValidator = require("../validators/product");
 
 controller.getProducts = async (req, res) => {
   res.status(501).send();
 };
 
 controller.addProduct = async (req, res) => {
-  res.status(501).send();
+  let validation = productValidator.validate(req.body);
+  if (validation == null || validation.error) {
+    res.status(400).send(validation.error.details[0].message);
+  } else {
+    const publisher = req.user;
+
+    let filter = {
+      type: req.body.type,
+      category: req.body.category,
+      subcategory: req.body.subcategory,
+    };
+
+    const category = await Category.findOne(filter);
+
+    let newProduct = new Product({
+      publisherId: publisher,
+      image: req.body.image,
+      title: req.body.title,
+      size: req.body.size,
+      price: req.body.price,
+      climate: req.body.climate,
+      description: req.body.description,
+      type: req.body.type,
+      category: category,
+    });
+
+    await newProduct.save();
+    const data = await Product.findOne({
+      title: req.body.title,
+      publisherId: publisher,
+    });
+    res.status(201).send(data);
+  }
 };
 
 controller.getProduct = async (req, res) => {

@@ -263,70 +263,69 @@ paths:
       responses:
         '201':
           description: Created
-      description: Not implemented - Create a product
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: idSeller
-          description: Id of an existing user.
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: tokenSeller
-          description: Token generated to access
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: name
-          description: Product name
-          required: true
-        - schema:
-            type: number
-          in: query
-          name: price
-          required: true
-          description: Product price
-        - schema:
-            type: string
-            enum:
-              - plant
-              - insect
-          in: query
-          name: type
-          description: Product Type
-          required: true
-        - schema:
-            type: string
-          in: query
-          name: image
-          description: Product Image
-        - schema:
-            type: string
-          in: query
-          name: description
-          description: Product Description
-        - schema:
-            type: string
-          in: query
-          name: specie
-          description: Product Specie
-        - schema:
-            type: string
-          in: query
-          name: size
-          description: Product Size
-        - schema:
-            type: boolean
-          in: query
-          name: egg
-          description: True if is egg or seed
+        '400':
+          description: Bad Request
+      description: Works - Create a product
+      parameters: []
       tags:
         - products
       security:
         - token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              description: ''
+              type: object
+              properties:
+                publisherId:
+                  type: string
+                  minLength: 1
+                image:
+                  type: string
+                  minLength: 1
+                  format: uri
+                title:
+                  type: string
+                  maxLength: 200
+                  minLength: 5
+                size:
+                  type: string
+                price:
+                  type: number
+                  minimum: 0
+                  format: double
+                climate:
+                  type: string
+                description:
+                  type: string
+                  maxLength: 500
+                  minLength: 2
+                type:
+                  type: string
+                  enum:
+                    - insect
+                    - plant
+                category:
+                  type: string
+                subcategory:
+                  type: string
+              required:
+                - publisherId
+                - image
+                - title
+                - price
+                - description
+                - type
+            examples:
+              example-1:
+                value:
+                  publisherId: 5345345fdsfg
+                  image: 'http://example.com'
+                  title: La planta que come
+                  price: 20
+                  description: Es una planta carnivora
+                  type: plant
     get:
       summary: Get Products
       operationId: getProducts
@@ -688,7 +687,7 @@ paths:
                       subcategory: Suculentas
                       __v: 0
       operationId: getCategories
-      description: Implemented - Returns a list of categories with different filters
+      description: Works - Returns a list of categories with different filters
       parameters:
         - schema:
             type: string
@@ -710,7 +709,9 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
-      description: Implemented - Add a new category
+        '409':
+          description: This category already exists
+      description: Works - Add a new category
       requestBody:
         content:
           application/json:
@@ -728,7 +729,6 @@ paths:
                   type: string
               required:
                 - type
-                - category
             examples:
               example-1:
                 value:
@@ -765,7 +765,7 @@ paths:
           description: Category could not be deleted
       tags:
         - category
-      description: Implemented - Use to delete a category
+      description: Works - Use to delete a category
       parameters:
         - schema:
             type: string

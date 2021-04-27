@@ -20,14 +20,24 @@ controller.addCategory = async (req, res) => {
     const category = req.body.category;
     const subcategory = req.body.subcategory;
 
-    if ((type == "plant" || type == "insect") && category != null) {
-      const term = new Category({
+    if (type == "plant" || type == "insect") {
+      const data = await Category.findOne({
         type: type,
         category: category,
         subcategory: subcategory,
       });
-      await term.save();
-      res.status(201).send();
+
+      if (!data) {
+        const term = new Category({
+          type: type,
+          category: category,
+          subcategory: subcategory,
+        });
+        await term.save();
+        res.status(201).send();
+      } else {
+        res.status(409).send("This category already exists");
+      }
     } else {
       res.status(400).send();
     }
