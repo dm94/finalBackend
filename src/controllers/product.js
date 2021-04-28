@@ -57,6 +57,47 @@ controller.getProduct = async (req, res) => {
 };
 
 controller.updateProduct = async (req, res) => {
+  const productId = req.params.id;
+  if (!productId) {
+    return res.status(400).send("Missing data");
+  }
+  let product = await Product.findOne({ _id: productId });
+  if (!product) {
+    return res.status(404).send("Product not found");
+  } else {
+    let publisherid = String(product.publisherId);
+    let userid = String(req.user._id);
+    if (userid != publisherid) {
+      return res.status(401).send();
+    }
+    let validation = productValidator.validate(req.body);
+    if (validation == null || validation.error) {
+      return res.status(400).send(validation.error.details[0].message);
+    } else {
+      let filter = {
+        type: req.body.type,
+        category: req.body.category,
+        subcategory: req.body.subcategory,
+      };
+      const category = await Category.findOne(filter);
+
+      product.title = req.body.title;
+      product.size = req.body.size;
+      product.price = req.body.price;
+      product.climate = req.body.climate;
+      product.description = req.body.description;
+      product.type = req.body.type;
+      product.category = category;
+
+      await product.save();
+
+      const data = await Product.findOne({
+        title: req.body.title,
+        publisherId: product.publisherId,
+      });
+      res.status(201).send(data);
+    }
+  }
   res.status(501).send();
 };
 

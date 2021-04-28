@@ -32,19 +32,19 @@ paths:
               examples:
                 example-1:
                   value:
+                    _id: string
                     firstName: string
-                    lastName: string
                     email: user@example.com
+                    username: string
+                    password: pa$$word
+                    lastName: string
                     dateOfBirth: '1997-10-31'
                     emailVerified: true
                     createDate: '2019-08-24'
-                    image: 'http://example.com'
+                    image:
+                      _id: string
+                      url: 'http://example.com'
                     location: string
-                    lastConectionDate: '2019-08-24T14:15:22Z'
-                    token: string
-                    username: string
-                    password: pa$$word
-                    _id: sadfs
         '400':
           description: Missing Required Information
         '409':
@@ -130,19 +130,19 @@ paths:
               examples:
                 example-1:
                   value:
+                    _id: string
                     firstName: string
-                    lastName: string
                     email: user@example.com
+                    username: string
+                    password: pa$$word
+                    lastName: string
                     dateOfBirth: '1997-10-31'
                     emailVerified: true
                     createDate: '2019-08-24'
-                    image: 'http://example.com'
+                    image:
+                      _id: string
+                      url: 'http://example.com'
                     location: string
-                    lastConectionDate: '2019-08-24T14:15:22Z'
-                    token: string
-                    username: string
-                    password: pa$$word
-                    _id: sadd
         '400':
           description: Bad Request
         '401':
@@ -390,13 +390,8 @@ paths:
       responses:
         '202':
           description: Accepted
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: User token
-          description: Generated access token
-      description: Not implemented -Allows product data to be updated
+      parameters: []
+      description: Implemented -Allows product data to be updated
       tags:
         - products
       security:
@@ -416,12 +411,7 @@ paths:
         '500':
           description: Product could not be deleted
       description: Implemented - Allows the deletion of a product
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: token
-          description: Generated access token
+      parameters: []
       tags:
         - products
       security:
@@ -732,11 +722,11 @@ paths:
               required:
                 - type
             examples:
-              example-1:
+              'Type: Plant -> Category: Cactus':
                 value:
                   type: plant
                   category: Cactus
-        description: 'This would create such a category: Type: Plant -> Category: Cactus -> Subcategory: Other'
+        description: 'This would create such a category: Type: Plant -> Category: Cactus'
       parameters:
         - schema:
             type: string
@@ -829,8 +819,7 @@ components:
           format: date
           description: The date that the user was created.
         image:
-          type: string
-          format: uri
+          $ref: '#/components/schemas/Image'
         location:
           type: string
       required:
@@ -863,9 +852,11 @@ components:
           type: string
         publisherId:
           $ref: '#/components/schemas/User'
-        image:
-          type: string
+        images:
           format: uri
+          type: array
+          items:
+            $ref: '#/components/schemas/Image'
         title:
           type: string
         size:
@@ -988,6 +979,16 @@ components:
       required:
         - type
         - category
+    Image:
+      title: Image
+      type: object
+      properties:
+        _id:
+          type: string
+        url:
+          type: string
+          format: uri
+      description: Object for each image
   securitySchemes:
     token:
       type: http
