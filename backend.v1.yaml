@@ -340,7 +340,11 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Product'
-      description: 'Not implemented -Returns a list of products. Max: 10 products'
+        '404':
+          description: Not Found
+      description: |-
+        Implemented -Returns a list of products.
+        10 products per page
       parameters:
         - schema:
             type: string
@@ -350,12 +354,21 @@ paths:
           in: query
           name: type
           description: Product Type
-          required: true
         - schema:
             type: integer
           in: query
-          name: pag
+          name: page
           description: Products page
+        - schema:
+            type: integer
+          in: query
+          name: categoryId
+          description: Category ID
+        - schema:
+            type: string
+          in: query
+          name: title
+          description: Tittle
       tags:
         - products
   '/products/{productID}':
@@ -391,7 +404,7 @@ paths:
         '202':
           description: Accepted
       parameters: []
-      description: Implemented -Allows product data to be updated
+      description: Implemented - Allows product data to be updated
       tags:
         - products
       security:

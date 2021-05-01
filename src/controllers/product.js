@@ -4,7 +4,30 @@ const Category = require("../models/category");
 const productValidator = require("../validators/product");
 
 controller.getProducts = async (req, res) => {
-  res.status(501).send();
+  let filter = {};
+
+  if (req.query.type) {
+    filter.type = req.query.type;
+  }
+  if (req.query.categoryId) {
+    filter.category = req.query.categoryId;
+  }
+  if (req.query.title) {
+    filter.title = req.query.title;
+  }
+
+  let perPage = 10;
+  let page = req.query.page > 0 ? req.query.page : 0;
+
+  let products = await Product.find(filter)
+    .limit(perPage)
+    .skip(perPage * page);
+
+  if (products != null) {
+    res.json(products);
+  } else {
+    res.status(404).send();
+  }
 };
 
 controller.addProduct = async (req, res) => {
