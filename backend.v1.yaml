@@ -369,6 +369,22 @@ paths:
           in: query
           name: title
           description: Tittle
+        - schema:
+            type: string
+            enum:
+              - date
+              - price
+          in: query
+          name: orderby
+          description: 'Default: date'
+        - schema:
+            type: string
+            enum:
+              - desc
+              - asc
+          in: query
+          name: sort
+          description: 'Default: desc'
       tags:
         - products
   '/products/{productID}':
@@ -859,6 +875,37 @@ components:
           climate: string
           type: plant
           description: string
+        example-2:
+          _id: string
+          publisherId:
+            _id: string
+            firstName: string
+            email: user@example.com
+            username: string
+            password: pa$$word
+            lastName: string
+            dateOfBirth: '1997-10-31'
+            emailVerified: true
+            createDate: '2019-08-24'
+            image:
+              _id: string
+              url: 'http://example.com'
+            location: string
+          images:
+            - _id: string
+              url: 'http://example.com'
+          title: string
+          size: string
+          price: 0
+          climate: string
+          type: plant
+          description: string
+          publishedDate: '2019-08-24'
+          sold: true
+          category:
+            type: plant
+            category: string
+            subcategory: string
       description: Product model
       properties:
         _id:

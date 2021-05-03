@@ -5,6 +5,12 @@ const productValidator = require("../validators/product");
 
 controller.getProducts = async (req, res) => {
   let filter = {};
+  let sort = {};
+
+  let sortType = req.query.orderby == "price" ? req.query.orderby : "date";
+  let sortOrder = req.query.orderby == "asc" ? req.query.orderby : "desc";
+
+  sort[sortType] = sortOrder;
 
   if (req.query.type) {
     filter.type = req.query.type;
@@ -20,6 +26,7 @@ controller.getProducts = async (req, res) => {
   let page = req.query.page > 0 ? req.query.page : 0;
 
   let products = await Product.find(filter)
+    .sort(sort)
     .limit(perPage)
     .skip(perPage * page);
 
