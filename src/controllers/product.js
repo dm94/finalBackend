@@ -19,7 +19,7 @@ controller.getProducts = async (req, res) => {
     filter.category = req.query.categoryId;
   }
   if (req.query.title) {
-    filter.title = req.query.title;
+    filter.title = new RegExp("^" + req.query.title + "$", "i");
   }
 
   let perPage = 10;
