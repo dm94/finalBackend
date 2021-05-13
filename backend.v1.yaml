@@ -29,22 +29,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
-              examples:
-                example-1:
-                  value:
-                    _id: string
-                    firstName: string
-                    email: user@example.com
-                    username: string
-                    password: pa$$word
-                    lastName: string
-                    dateOfBirth: '1997-10-31'
-                    emailVerified: true
-                    createDate: '2019-08-24'
-                    image:
-                      _id: string
-                      url: 'http://example.com'
-                    location: string
+              examples: {}
         '400':
           description: Missing Required Information
         '409':
@@ -64,21 +49,28 @@ paths:
                 password:
                   type: string
                   minLength: 12
-                username:
+                lastName:
                   type: string
-                  minLength: 5
+                  maxLength: 30
+                  minLength: 2
+                firstName:
+                  type: string
+                  minLength: 2
+                  maxLength: 30
               required:
                 - email
                 - dateOfBirth
                 - password
-                - username
+                - lastName
+                - firstName
             examples:
-              Create User:
+              Create new user:
                 value:
-                  username: pepito
-                  password: asdasasdasddad
-                  email: pepito@gmail.com
-                  dateOfBirth: '1996-08-24'
+                  email: user@example.com
+                  dateOfBirth: '2000-08-24'
+                  password: asdasd&%$&fsdf5SDF
+                  lastName: pepito
+                  firstName: geremi
         description: Post the necessary fields for the API to create a new user.
       description: Works - Create a new user.
       tags:
@@ -136,7 +128,7 @@ paths:
                     username: string
                     password: pa$$word
                     lastName: string
-                    dateOfBirth: '1997-10-31'
+                    dateOfBirth: '2000-08-24T00:00:00.000Z'
                     emailVerified: true
                     createDate: '2019-08-24'
                     image:
@@ -254,6 +246,43 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Product'
+              examples:
+                example-1:
+                  value:
+                    username: string
+                    firstName: string
+                    location: string
+                    products:
+                      - _id: string
+                        publisherId:
+                          _id: string
+                          firstName: string
+                          email: user@example.com
+                          username: string
+                          password: pa$$word
+                          lastName: string
+                          dateOfBirth: '2000-08-24T00:00:00.000Z'
+                          emailVerified: true
+                          createDate: '2019-08-24'
+                          image:
+                            _id: string
+                            url: 'http://example.com'
+                          location: string
+                        images:
+                          - _id: string
+                            url: 'http://example.com'
+                        title: string
+                        size: string
+                        price: 0
+                        climate: string
+                        type: plant
+                        description: string
+                        publishedDate: '2019-08-24'
+                        sold: true
+                        category:
+                          type: plant
+                          category: string
+                          subcategory: string
         '404':
           description: Not Found
       operationId: getUserProfile
@@ -849,19 +878,19 @@ components:
       description: User schema
       x-examples:
         example-1:
-          id: 0
+          _id: string
           firstName: string
-          lastName: string
           email: user@example.com
+          username: string
+          password: pa$$word
+          lastName: string
           dateOfBirth: '1997-10-31'
           emailVerified: true
           createDate: '2019-08-24'
-          image: 'http://example.com'
+          image:
+            _id: string
+            url: 'http://example.com'
           location: string
-          lastConectionDate: '2019-08-24T14:15:22Z'
-          token: string
-          username: string
-          password: pa$$word
       properties:
         _id:
           description: Unique identifier for the given user.
@@ -869,7 +898,7 @@ components:
         firstName:
           type: string
           minLength: 2
-          maxLength: 20
+          maxLength: 30
         email:
           type: string
           format: email
@@ -881,10 +910,12 @@ components:
           format: password
         lastName:
           type: string
+          minLength: 2
+          maxLength: 30
         dateOfBirth:
           type: string
-          format: date
-          example: '1997-10-31'
+          format: date-time
+          example: '2000-08-24T00:00:00.000Z'
         emailVerified:
           type: boolean
           description: Set to true if the user's email has been verified.
@@ -903,7 +934,7 @@ components:
         - username
         - password
         - lastName
-        - emailVerified
+        - dateOfBirth
     Product:
       title: Product
       type: object

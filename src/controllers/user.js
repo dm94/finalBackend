@@ -5,12 +5,12 @@ const authJWT = require("../auth/jwt");
 const mailerController = require("./mailer");
 const userValidator = require("../validators/user");
 const Product = require("../models/product");
+const others = require("../helpers/others");
 const crypto = require("crypto");
 
 controller.addUser = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
-  const username = req.body.username;
   const dateOfBirth = req.body.dateOfBirth;
 
   if (!email || !password) {
@@ -19,19 +19,28 @@ controller.addUser = async (req, res) => {
 
   try {
     const other = await User.findOne({ email: email });
+
     if (other) {
       return res.status(409).send("This email already exists");
     }
 
-    let validation = userValidator.validatePass(email);
+    let validateSignUp = userValidator.validateSignUp(req.body);
 
-    if (validation == null || validation.error) {
-      const error = validation.error.details[0].message;
+    if (validateSignUp == null || validateSignUp.error) {
+      let error = validateSignUp.error.details[0].message;
       return res.status(400).send(error);
     } else {
+      const username =
+        req.body.firstName +
+        req.body.lastName.charAt(0) +
+        "-" +
+        others.getRandomId(5);
+
       const user = new User({
         email: email,
         password: password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         username: username,
         dateOfBirth: dateOfBirth,
       });
