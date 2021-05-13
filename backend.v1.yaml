@@ -419,6 +419,14 @@ paths:
       responses:
         '202':
           description: Accepted
+        '400':
+          description: Bad Request
+        '401':
+          description: Unauthorized
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
       parameters: []
       description: Implemented - Allows product data to be updated
       tags:
@@ -435,6 +443,8 @@ paths:
           description: Missing data
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
         '404':
           description: Product not found
         '500':
@@ -534,6 +544,8 @@ paths:
                       text: string
                       date: '2019-08-24T14:15:22Z'
                       hasRead: true
+        '403':
+          description: Forbidden
       operationId: getMessages
       description: Implemented - Return messages from a chat
       tags:
@@ -551,6 +563,8 @@ paths:
           description: Bad Request
         '401':
           description: Unauthorized
+        '403':
+          description: Forbidden
         '404':
           description: Not Found
       parameters: []

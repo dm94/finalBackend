@@ -76,7 +76,7 @@ controller.getMessages = async (req, res) => {
 
     res.status(200).send(messages);
   } else {
-    res.status(401).send();
+    res.status(403).send();
   }
 };
 
@@ -104,7 +104,7 @@ controller.addMessage = async (req, res) => {
 
         return res.status(201).send(message);
       } else {
-        return res.status(401).send();
+        return res.status(403).send();
       }
     }
     return res.status(404).send();

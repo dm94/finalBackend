@@ -98,7 +98,7 @@ controller.updateProduct = async (req, res) => {
     let publisherid = String(product.publisherId);
     let userid = String(req.user._id);
     if (userid != publisherid) {
-      return res.status(401).send();
+      return res.status(403).send();
     }
     let validation = productValidator.validate(req.body);
     if (validation == null || validation.error) {
@@ -125,10 +125,10 @@ controller.updateProduct = async (req, res) => {
         title: req.body.title,
         publisherId: product.publisherId,
       });
-      res.status(201).send(data);
+      res.status(202).send(data);
     }
   }
-  res.status(501).send();
+  res.status(500).send();
 };
 
 controller.deleteProduct = async (req, res) => {
@@ -150,7 +150,7 @@ controller.deleteProduct = async (req, res) => {
         res.status(500).send("Product could not be deleted");
       }
     } else {
-      res.status(401).send();
+      res.status(403).send();
     }
   }
 };
