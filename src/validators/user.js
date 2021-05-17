@@ -44,7 +44,7 @@ function validatePass(body) {
       lowerCase: 1,
       upperCase: 1,
       numeric: 1,
-      symbol: 1,
+      symbol: 0,
       requirementCount: 4,
     }),
   }).validate({ password: body.password }, { abortEarly: false });
