@@ -40,7 +40,7 @@ function validatePass(body) {
   return Joi.object({
     password: new PasswordComplexity({
       min: 8,
-      max: 25,
+      max: 100,
       lowerCase: 1,
       upperCase: 1,
       numeric: 1,
