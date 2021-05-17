@@ -166,7 +166,6 @@ controller.updateUser = async (req, res) => {
   let user = req.user;
   if (req.query.action != null) {
     let validation = null;
-    console.log(user);
     if (req.query.action == "updateimage") {
       validation = userValidator.validateImage(req.body);
       user.image = req.body.image;
@@ -175,7 +174,6 @@ controller.updateUser = async (req, res) => {
       user.firstName = req.body.firstName;
       user.lastName = req.body.lastName;
       user.location = req.body.location;
-      console.log("a entrado aqui");
     } else if (req.query.action == "updatedate") {
       validation = userValidator.validateDate(req.body);
       user.dateOfBirth = req.body.dateOfBirth;
