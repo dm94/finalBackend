@@ -25,7 +25,7 @@ router.post("/confirmation", passport.auth, userController.confirmationEmail);
 router.get("/confirmation", passport.auth, userController.resendTokenEmail);
 router.post("/users", userController.addUser);
 router.get("/users", passport.auth, userController.getUser);
-router.patch("/users", passport.auth, userController.updateUser);
+router.put("/users", passport.auth, userController.updateUser);
 router.delete("/users", passport.auth, userController.deleteUser);
 router.get("/users/:username/profile", userController.getUserProfile);
 

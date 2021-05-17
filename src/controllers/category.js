@@ -35,7 +35,7 @@ controller.addCategory = async (req, res) => {
         await term.save();
         res.status(201).send();
       } else {
-        res.status(409).send("This category already exists");
+        res.status(409).send({ error: "This category already exists" });
       }
     } else {
       res.status(400).send();

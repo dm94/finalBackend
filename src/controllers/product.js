@@ -76,11 +76,11 @@ controller.addProduct = async (req, res) => {
 controller.getProduct = async (req, res) => {
   const productId = req.params.id;
   if (!productId) {
-    return res.status(400).send("Missing data");
+    return res.status(400).send({ error: "Missing data" });
   }
   const product = await Product.findOne({ _id: productId });
   if (!product) {
-    res.status(404).send("Product not found");
+    res.status(404).send({ error: "Product not found" });
   } else {
     res.status(200).send(product);
   }
@@ -89,11 +89,11 @@ controller.getProduct = async (req, res) => {
 controller.updateProduct = async (req, res) => {
   const productId = req.params.id;
   if (!productId) {
-    return res.status(400).send("Missing data");
+    return res.status(400).send({ error: "Missing data" });
   }
   let product = await Product.findOne({ _id: productId });
   if (!product) {
-    return res.status(404).send("Product not found");
+    return res.status(404).send({ error: "Product not found" });
   } else {
     let publisherid = String(product.publisherId);
     let userid = String(req.user._id);
@@ -134,11 +134,11 @@ controller.updateProduct = async (req, res) => {
 controller.deleteProduct = async (req, res) => {
   const productId = req.params.id;
   if (!productId) {
-    return res.status(400).send("Missing data");
+    return res.status(400).send({ error: "Missing data" });
   }
   const product = await Product.findOne({ _id: productId });
   if (!product) {
-    res.status(404).send("Product not found");
+    res.status(404).send({ error: "Product not found" });
   } else {
     const user = req.user;
     if (product.publisherId == user._id) {
@@ -147,7 +147,7 @@ controller.deleteProduct = async (req, res) => {
         res.status(204).send();
       } catch (err) {
         console.log(err);
-        res.status(500).send("Product could not be deleted");
+        res.status(500).send({ error: "Product could not be deleted" });
       }
     } else {
       res.status(403).send();

@@ -21,7 +21,7 @@ controller.addUser = async (req, res) => {
     const other = await User.findOne({ email: email });
 
     if (other) {
-      return res.status(409).send("This email already exists");
+      return res.status(409).send({ error: "This email already exists" });
     }
 
     let validateSignUp = userValidator.validateSignUp(req.body);
@@ -56,7 +56,7 @@ controller.addUser = async (req, res) => {
     }
   } catch (err) {
     console.log(err);
-    res.status(409).send("This nickname already exists");
+    res.status(409).send({ error: "This nickname already exists" });
   }
 };
 
@@ -64,17 +64,17 @@ controller.userLogin = async (req, res) => {
   const email = req.body.email;
   const password = req.body.password;
   if (!email || !password) {
-    return res.status(400).send("Missing data");
+    return res.status(400).send({ error: "Missing data" });
   }
   try {
     const user = await User.findOne({ email: email });
     if (!user) {
-      return res.status(401).send("Incorrect credentials");
+      return res.status(401).send({ error: "Incorrect credentials" });
     }
 
     const validate = await user.isValidPassword(password);
     if (!validate) {
-      return res.status(401).send("Incorrect credentials");
+      return res.status(401).send({ error: "Incorrect credentials" });
     }
     const dataToken = authJWT.createToken(user);
     return res.send({
@@ -83,7 +83,7 @@ controller.userLogin = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(401).send("Incorrect credentials");
+    res.status(401).send({ error: "Incorrect credentials" });
   }
 };
 
@@ -94,11 +94,15 @@ controller.getUser = async (req, res) => {
 controller.confirmationEmail = async (req, res) => {
   Token.findOne({ token: req.body.token }, function (err, token) {
     if (!token) {
-      return res.status(400).send("A token is required for verification");
+      return res
+        .status(400)
+        .send({ error: "A token is required for verification" });
     }
     let user = req.user;
     if (user.emailVerified) {
-      return res.status(405).send("This user has already been verified");
+      return res
+        .status(405)
+        .send({ error: "This user has already been verified" });
     }
 
     user.emailVerified = true;
@@ -107,7 +111,7 @@ controller.confirmationEmail = async (req, res) => {
         return res.status(500).send({ msg: err.message });
       }
       Token.findByIdAndDelete(token);
-      res.status(200).send("The account has been verified");
+      res.status(200).send({ sucess: "The account has been verified" });
     });
   });
 };
@@ -135,7 +139,7 @@ controller.getUserProfile = async (req, res) => {
   const userProfile = req.params.username;
 
   const userData = await User.findOne({ username: userProfile }).select(
-    "_id username createDate firstName"
+    "_id username createDate firstName location"
   );
 
   if (!userData) {
@@ -151,6 +155,7 @@ controller.getUserProfile = async (req, res) => {
     username: userData.username,
     createDate: userData.createDate,
     firstName: userData.firstName,
+    location: userData.location,
     products: products,
   };
 
@@ -159,10 +164,9 @@ controller.getUserProfile = async (req, res) => {
 
 controller.updateUser = async (req, res) => {
   let user = req.user;
-
   if (req.query.action != null) {
     let validation = null;
-
+    console.log(user);
     if (req.query.action == "updateimage") {
       validation = userValidator.validateImage(req.body);
       user.image = req.body.image;
@@ -171,6 +175,7 @@ controller.updateUser = async (req, res) => {
       user.firstName = req.body.firstName;
       user.lastName = req.body.lastName;
       user.location = req.body.location;
+      console.log("a entrado aqui");
     } else if (req.query.action == "updatedate") {
       validation = userValidator.validateDate(req.body);
       user.dateOfBirth = req.body.dateOfBirth;
@@ -179,8 +184,9 @@ controller.updateUser = async (req, res) => {
       try {
         const other = await User.findOne({ email: email });
         if (other) {
-          return res.status(409).send("This email already exists");
+          return res.status(409).send({ error: "This email already exists" });
         }
+        Token.findByIdAndDelete(user.token);
         let token = new Token({
           _userId: user._id,
           token: crypto.randomBytes(16).toString("hex"),
@@ -188,7 +194,7 @@ controller.updateUser = async (req, res) => {
         await token.save();
         mailerController.sendTokenEmail(email, token.token);
       } catch (err) {
-        return res.status(503).send("Service Unavailable");
+        return res.status(503).send({ error: "Service Unavailable" });
       }
       user.email = req.body.email;
       user.emailVerified = false;
@@ -205,8 +211,7 @@ controller.updateUser = async (req, res) => {
         if (err) {
           return res.status(500).send({ msg: err.message });
         }
-        Token.findByIdAndDelete(token);
-        res.status(200).send("User update");
+        res.status(200).send({ success: "User update" });
       });
     }
   } else {
@@ -220,7 +225,7 @@ controller.deleteUser = async (req, res) => {
     res.status(204).send();
   } catch (err) {
     console.log(err);
-    res.status(500).send("User could not be deleted");
+    res.status(500).send({ error: "User could not be deleted" });
   }
 };
 

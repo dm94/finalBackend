@@ -52,7 +52,7 @@ controller.makeNewChat = async (req, res) => {
       }
       return res.status(500).send();
     } else {
-      res.status(404).send("Product not found");
+      res.status(404).send({ error: "Product not found" });
     }
   } else {
     res.status(400).send();
@@ -136,7 +136,7 @@ controller.deleteChat = async (req, res) => {
           return res.status(204).send();
         } catch (err) {
           console.log(err);
-          return res.status(500).send("Chat could not be deleted");
+          return res.status(500).send({ error: "Chat could not be deleted" });
         }
       }
     }
