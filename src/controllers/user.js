@@ -85,7 +85,9 @@ controller.userLogin = async (req, res) => {
 
 controller.getUser = async (req, res) => {
   try {
-    res.send(req.user);
+    let user = req.user;
+    user.password = undefined;
+    res.send(user);
   } catch (err) {
     console.log(err);
     res.status(500).send();

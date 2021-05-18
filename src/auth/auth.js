@@ -13,7 +13,7 @@ passport.use(
     },
     async (payload, done) => {
       try {
-        const user = await User.findById(payload.sub).select("-password");
+        const user = await User.findById(payload.sub);
         if (!user) {
           return done(null, false);
         }
