@@ -194,18 +194,19 @@ controller.updateUser = async (req, res) => {
       } else if (req.query.action == "updateemail") {
         validation = userValidator.validateEmail(req.body);
         try {
-          const other = await User.findOne({ email: email });
+          const other = await User.findOne({ email: req.body.email });
           if (other) {
             return res.status(409).send({ error: "This email already exists" });
           }
-          Token.findByIdAndDelete(user.token);
+          Token.deleteMany({ _userId: user._id });
           let token = new Token({
             _userId: user._id,
             token: crypto.randomBytes(16).toString("hex"),
           });
           await token.save();
-          mailerController.sendTokenEmail(email, token.token);
+          mailerController.sendTokenEmail(req.body.email, token.token);
         } catch (err) {
+          console.log(err);
           return res.status(503).send({ error: "Service Unavailable" });
         }
         user.email = req.body.email;
