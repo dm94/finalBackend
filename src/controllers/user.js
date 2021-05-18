@@ -72,10 +72,6 @@ controller.userLogin = async (req, res) => {
       return res.status(401).send({ error: "Incorrect credentials" });
     }
 
-    const validate = await user.isValidPassword(password);
-    if (!validate) {
-      return res.status(401).send({ error: "Incorrect credentials" });
-    }
     const dataToken = authJWT.createToken(user);
     return res.send({
       access_token: dataToken[0],
@@ -83,37 +79,47 @@ controller.userLogin = async (req, res) => {
     });
   } catch (err) {
     console.log(err);
-    res.status(401).send({ error: "Incorrect credentials" });
+    res.status(500).send();
   }
 };
 
 controller.getUser = async (req, res) => {
-  res.send(req.user);
+  try {
+    res.send(req.user);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
 };
 
 controller.confirmationEmail = async (req, res) => {
-  Token.findOne({ token: req.body.token }, function (err, token) {
-    if (!token) {
-      return res
-        .status(400)
-        .send({ error: "A token is required for verification" });
-    }
-    let user = req.user;
-    if (user.emailVerified) {
-      return res
-        .status(405)
-        .send({ error: "This user has already been verified" });
-    }
-
-    user.emailVerified = true;
-    user.save(function (err) {
-      if (err) {
-        return res.status(500).send({ msg: err.message });
+  try {
+    Token.findOne({ token: req.body.token }, function (err, token) {
+      if (!token) {
+        return res
+          .status(400)
+          .send({ error: "A token is required for verification" });
       }
-      Token.findByIdAndDelete(token);
-      res.status(200).send({ sucess: "The account has been verified" });
+      let user = req.user;
+      if (user.emailVerified) {
+        return res
+          .status(405)
+          .send({ error: "This user has already been verified" });
+      }
+
+      user.emailVerified = true;
+      user.save(function (err) {
+        if (err) {
+          return res.status(500).send({ msg: err.message });
+        }
+        Token.findByIdAndDelete(token);
+        res.status(200).send({ sucess: "The account has been verified" });
+      });
     });
-  });
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
 };
 
 controller.resendTokenEmail = async (req, res) => {
@@ -136,84 +142,94 @@ controller.resendTokenEmail = async (req, res) => {
 };
 
 controller.getUserProfile = async (req, res) => {
-  const userProfile = req.params.username;
+  try {
+    const userProfile = req.params.username;
 
-  const userData = await User.findOne({ username: userProfile }).select(
-    "_id username createDate firstName location"
-  );
+    const userData = await User.findOne({ username: userProfile }).select(
+      "_id username createDate firstName location"
+    );
 
-  if (!userData) {
-    return res.status(404).send();
+    if (!userData) {
+      return res.status(404).send();
+    }
+
+    let products = await Product.find({
+      publisherId: userData._id,
+    });
+
+    let profile = {
+      _id: userData._id,
+      username: userData.username,
+      createDate: userData.createDate,
+      firstName: userData.firstName,
+      location: userData.location,
+      products: products,
+    };
+
+    res.status(200).send(profile);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
   }
-
-  let products = await Product.find({
-    publisherId: userData._id,
-  });
-
-  let profile = {
-    _id: userData._id,
-    username: userData.username,
-    createDate: userData.createDate,
-    firstName: userData.firstName,
-    location: userData.location,
-    products: products,
-  };
-
-  res.status(200).send(profile);
 };
 
 controller.updateUser = async (req, res) => {
-  let user = req.user;
-  if (req.query.action != null) {
-    let validation = null;
-    if (req.query.action == "updateimage") {
-      validation = userValidator.validateImage(req.body);
-      user.image = req.body.image;
-    } else if (req.query.action == "updateprofile") {
-      validation = userValidator.validateProfile(req.body);
-      user.firstName = req.body.firstName;
-      user.lastName = req.body.lastName;
-      user.location = req.body.location;
-    } else if (req.query.action == "updatedate") {
-      validation = userValidator.validateDate(req.body);
-      user.dateOfBirth = req.body.dateOfBirth;
-    } else if (req.query.action == "updateemail") {
-      validation = userValidator.validateEmail(req.body);
-      try {
-        const other = await User.findOne({ email: email });
-        if (other) {
-          return res.status(409).send({ error: "This email already exists" });
+  try {
+    let user = req.user;
+    if (req.query.action != null) {
+      let validation = null;
+      if (req.query.action == "updateimage") {
+        validation = userValidator.validateImage(req.body);
+        user.image = req.body.image;
+      } else if (req.query.action == "updateprofile") {
+        validation = userValidator.validateProfile(req.body);
+        user.firstName = req.body.firstName;
+        user.lastName = req.body.lastName;
+        user.location = req.body.location;
+      } else if (req.query.action == "updatedate") {
+        validation = userValidator.validateDate(req.body);
+        user.dateOfBirth = req.body.dateOfBirth;
+      } else if (req.query.action == "updateemail") {
+        validation = userValidator.validateEmail(req.body);
+        try {
+          const other = await User.findOne({ email: email });
+          if (other) {
+            return res.status(409).send({ error: "This email already exists" });
+          }
+          Token.findByIdAndDelete(user.token);
+          let token = new Token({
+            _userId: user._id,
+            token: crypto.randomBytes(16).toString("hex"),
+          });
+          await token.save();
+          mailerController.sendTokenEmail(email, token.token);
+        } catch (err) {
+          return res.status(503).send({ error: "Service Unavailable" });
         }
-        Token.findByIdAndDelete(user.token);
-        let token = new Token({
-          _userId: user._id,
-          token: crypto.randomBytes(16).toString("hex"),
-        });
-        await token.save();
-        mailerController.sendTokenEmail(email, token.token);
-      } catch (err) {
-        return res.status(503).send({ error: "Service Unavailable" });
+        user.email = req.body.email;
+        user.emailVerified = false;
+      } else if (req.query.action == "updatepass") {
+        validation = userValidator.validateEmail(req.body);
+        user.password = req.body.password;
       }
-      user.email = req.body.email;
-      user.emailVerified = false;
-    } else if (req.query.action == "updatepass") {
-      validation = userValidator.validateEmail(req.body);
-      user.password = req.body.password;
-    }
 
-    if (validation == null || validation.error) {
-      const error = validation.error.details[0].message;
-      return res.status(400).send(error);
+      if (validation == null || validation.error) {
+        const error = validation.error.details[0].message;
+        return res.status(400).send(error);
+      } else {
+        user.save(function (err) {
+          if (err) {
+            return res.status(500).send({ msg: err.message });
+          }
+          res.status(200).send({ success: "User update" });
+        });
+      }
     } else {
-      user.save(function (err) {
-        if (err) {
-          return res.status(500).send({ msg: err.message });
-        }
-        res.status(200).send({ success: "User update" });
-      });
+      res.status(400).send();
     }
-  } else {
-    res.status(400).send();
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
   }
 };
 
