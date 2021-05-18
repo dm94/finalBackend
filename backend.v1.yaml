@@ -109,7 +109,7 @@ paths:
       tags:
         - users
       description: Works - Delete User
-    patch:
+    put:
       summary: Update User Information
       operationId: updateUser
       responses:
@@ -442,7 +442,7 @@ paths:
           description: Product not found
       operationId: getProduct
       description: Implemented - Returns a product
-    patch:
+    put:
       summary: Update Product
       operationId: updateProduct
       responses:
