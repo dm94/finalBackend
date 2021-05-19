@@ -39,7 +39,6 @@ helper.send = (subject, to, text, html) => {
           reject(error);
           return;
         }
-
         resolve(info);
       });
     } catch (error) {

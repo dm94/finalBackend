@@ -1,6 +1,6 @@
 const controller = {};
 const User = require("../models/user");
-const Token = require("../models/token");
+const Code = require("../models/code");
 const authJWT = require("../auth/jwt");
 const mailerController = require("./mailer");
 const userValidator = require("../validators/user");
@@ -46,12 +46,12 @@ controller.addUser = async (req, res) => {
       });
       await user.save();
       const data = await User.findOne({ email: email });
-      let token = new Token({
+      let code = new Code({
         _userId: data._id,
-        token: crypto.randomBytes(16).toString("hex"),
+        code: crypto.randomBytes(16).toString("hex"),
       });
-      await token.save();
-      mailerController.sendTokenEmail(email, token.token);
+      await code.save();
+      mailerController.sendTokenEmail(email, code.code);
       res.status(201).send(data);
     }
   } catch (err) {
@@ -106,8 +106,8 @@ controller.getUser = async (req, res) => {
 
 controller.confirmationEmail = async (req, res) => {
   try {
-    Token.findOne({ token: req.body.token }, function (err, token) {
-      if (!token) {
+    Code.findOne({ code: req.body.code }, function (err, code) {
+      if (!code) {
         return res
           .status(400)
           .send({ error: "A token is required for verification" });
@@ -124,7 +124,7 @@ controller.confirmationEmail = async (req, res) => {
         if (err) {
           return res.status(500).send({ msg: err.message });
         }
-        Token.findByIdAndDelete(token);
+        Code.findByIdAndDelete(code);
         res.status(200).send({ sucess: "The account has been verified" });
       });
     });
@@ -135,17 +135,23 @@ controller.confirmationEmail = async (req, res) => {
 };
 
 controller.resendTokenEmail = async (req, res) => {
-  let token = new Token({
-    _userId: req.user._id,
-    token: crypto.randomBytes(16).toString("hex"),
-  });
-
   try {
-    token.save(function (err) {
+    Code.findOne({ _userId: req.user._id }, function (err, code) {
+      if (code) {
+        Code.findByIdAndDelete(code);
+      }
+    });
+
+    let code = new Code({
+      _userId: req.user._id,
+      code: crypto.randomBytes(16).toString("hex"),
+    });
+
+    code.save(function (err) {
       if (err) {
         return res.status(500).send({ msg: err.message });
       }
-      let code = mailerController.sendTokenEmail(req.user.email, token.token);
+      mailerController.sendTokenEmail(req.user.email, code.token);
       res.status(200).send();
     });
   } catch (error) {

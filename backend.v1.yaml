@@ -715,11 +715,11 @@ paths:
               description: ''
               type: object
               properties:
-                token:
+                code:
                   type: string
                   minLength: 1
               required:
-                - token
+                - code
             examples:
               example-1:
                 value:
