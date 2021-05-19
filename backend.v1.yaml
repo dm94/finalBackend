@@ -20,7 +20,7 @@ tags:
 paths:
   /users:
     post:
-      summary: Create New User
+      summary: addUser
       operationId: addUser
       responses:
         '201':
@@ -74,15 +74,13 @@ paths:
                   lastName: pepito
                   firstName: geremi
         description: Post the necessary fields for the API to create a new user.
-      description: |-
-        addUser
-        Works - Create a new user.
+      description: Works - Create a new user.
       tags:
         - users
       parameters: []
     parameters: []
     get:
-      summary: ''
+      summary: getUser
       operationId: getUser
       responses:
         '200':
@@ -95,15 +93,13 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      description: |-
-        getUser
-        Works - Retrieve the information of the user
+      description: Works - Retrieve the information of the user
       tags:
         - users
       security:
         - token: []
     delete:
-      summary: ''
+      summary: deleteUser
       operationId: deleteUser
       responses:
         '204':
@@ -116,11 +112,9 @@ paths:
         - token: []
       tags:
         - users
-      description: |-
-        deleteUser
-        Works - Disable the user
+      description: Works - Disable the user
     put:
-      summary: Update User Information
+      summary: updateUser
       operationId: updateUser
       responses:
         '200':
@@ -154,7 +148,6 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
-        updateUser
         Works - Update the information of an existing user.
         action:
         updateimage - To update the image
@@ -236,7 +229,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Profile
+      summary: getUserProfile
       tags:
         - users
       responses:
@@ -299,12 +292,10 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getUserProfile
-      description: |-
-        getUserProfile
-        Works - Returns the user profile
+      description: Works - Returns the user profile
   /products:
     post:
-      summary: Add products
+      summary: addProduct
       operationId: addProduct
       responses:
         '201':
@@ -313,9 +304,7 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: |-
-        addProduct
-        Works - Create a product
+      description: Works - Create a product
       parameters: []
       tags:
         - products
@@ -377,7 +366,7 @@ paths:
                   description: Es una planta carnivora
                   type: plant
     get:
-      summary: Get Products
+      summary: getProducts
       operationId: getProducts
       responses:
         '200':
@@ -393,7 +382,6 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
-        getProducts
         Implemented -Returns a list of products.
         10 products per page
       parameters:
@@ -447,7 +435,7 @@ paths:
         required: true
         description: Product ID
     get:
-      summary: Get Product
+      summary: getProduct
       tags:
         - products
       responses:
@@ -465,11 +453,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getProduct
-      description: |-
-        getProduct
-        Implemented - Returns a product
+      description: Implemented - Returns a product
     put:
-      summary: Update Product
+      summary: updateProduct
       operationId: updateProduct
       responses:
         '202':
@@ -483,15 +469,13 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: |-
-        updateProduct
-        Implemented - Allows product data to be updated
+      description: Implemented - Allows product data to be updated
       tags:
         - products
       security:
         - token: []
     delete:
-      summary: Delete Product
+      summary: deleteProduct
       operationId: deleteProduct
       responses:
         '204':
@@ -506,9 +490,7 @@ paths:
           description: Product not found
         '500':
           description: Product could not be deleted
-      description: |-
-        deleteProduct
-        Implemented - Allows the deletion of a product
+      description: Implemented - Allows the deletion of a product
       parameters: []
       tags:
         - products
@@ -516,7 +498,7 @@ paths:
         - token: []
   /chats:
     get:
-      summary: Get Messages
+      summary: getChats
       tags:
         - chat
       responses:
@@ -542,15 +524,13 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getChats
-      description: |-
-        getChats
-        Implemented - Returns chats from a user
+      description: Implemented - Returns chats from a user
       parameters: []
       security:
         - token: []
     parameters: []
     post:
-      summary: New chat
+      summary: makeNewChat
       operationId: makeNewChat
       responses:
         '201':
@@ -562,9 +542,7 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: |-
-        makeNewChat
-        Implemented - Create a chat with another user
+      description: Implemented - Create a chat with another user
       tags:
         - chat
       security:
@@ -590,7 +568,7 @@ paths:
         in: path
         required: true
     get:
-      summary: Get Messages
+      summary: getMessages
       responses:
         '200':
           description: OK
@@ -614,16 +592,14 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getMessages
-      description: |-
-        getMessages
-        Implemented - Return messages from a chat
+      description: Implemented - Return messages from a chat
       tags:
         - chat
       parameters: []
       security:
         - token: []
     post:
-      summary: New message
+      summary: addMessage
       operationId: addMessage
       responses:
         '201':
@@ -639,15 +615,13 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: |-
-        addMessage
-        Implemented - Add a message to a chat
+      description: Implemented - Add a message to a chat
       tags:
         - chat
       security:
         - token: []
     delete:
-      summary: Delete chat
+      summary: deleteChat
       operationId: deleteChat
       responses:
         '204':
@@ -660,9 +634,7 @@ paths:
           description: Not Found
         '500':
           description: Chat could not be deleted
-      description: |-
-        deleteChat
-        Implemented - Hides the chat until both parties delete the chat
+      description: Implemented - Hides the chat until both parties delete the chat
       parameters: []
       tags:
         - chat
@@ -671,7 +643,7 @@ paths:
   /login:
     parameters: []
     post:
-      summary: ''
+      summary: userLogin
       operationId: userLogin
       responses:
         '200':
@@ -691,9 +663,7 @@ paths:
           description: Credenciales incorrectas
         '500':
           description: Internal Server Error
-      description: |-
-        userLogin
-        Works - Returns a temporary access token
+      description: Works - Returns a temporary access token
       parameters: []
       tags:
         - users
@@ -718,7 +688,7 @@ paths:
                   password: asdasdad
   /confirmation:
     post:
-      summary: ''
+      summary: confirmationEmail
       operationId: confirmationEmail
       responses:
         '200':
@@ -730,7 +700,6 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
-        confirmationEmail
         Works
         Used to validate a user's email.
         If the email is not validated you will not be able to create products or send messages.
@@ -756,23 +725,21 @@ paths:
                 value:
                   token: 0b1a28fb037e58c446f57a6506322e33
     get:
-      summary: ''
+      summary: resendTokenEmail
       operationId: resendTokenEmail
       responses:
         '200':
           description: OK
         '500':
           description: Internal Server Error
-      description: |-
-        resendTokenEmail
-        Works - Resend message to verify the user
+      description: Works - Resend message to verify the user
       security:
         - token: []
       tags:
         - users
   /categories:
     get:
-      summary: Your GET endpoint
+      summary: getCategories
       responses:
         '200':
           description: OK
@@ -841,9 +808,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getCategories
-      description: |-
-        getCategories
-        Works - Returns a list of categories with different filters
+      description: Works - Returns a list of categories with different filters
       parameters:
         - schema:
             type: string
@@ -856,7 +821,7 @@ paths:
       tags:
         - category
     post:
-      summary: ''
+      summary: addCategory
       operationId: addCategory
       responses:
         '201':
@@ -869,9 +834,7 @@ paths:
           description: This category already exists
         '500':
           description: Internal Server Error
-      description: |-
-        addCategory
-        Works - Add a new category
+      description: Works - Add a new category
       requestBody:
         content:
           application/json:
@@ -914,7 +877,7 @@ paths:
         in: path
         required: true
     delete:
-      summary: ''
+      summary: deleteCategory
       operationId: deleteCategory
       responses:
         '204':
@@ -925,9 +888,7 @@ paths:
           description: Category could not be deleted
       tags:
         - category
-      description: |-
-        deleteCategory
-        Works - Use to delete a category
+      description: Works - Use to delete a category
       parameters:
         - schema:
             type: string
