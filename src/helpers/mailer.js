@@ -35,6 +35,7 @@ helper.send = (subject, to, text, html) => {
       const from = process.env.MAIL_DIRECTION;
       transport.sendMail({ from, subject, to, text, html }, (error, info) => {
         if (error) {
+          console.log(error);
           reject(error);
           return;
         }
