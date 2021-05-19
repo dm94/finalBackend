@@ -87,6 +87,16 @@ controller.getUser = async (req, res) => {
   try {
     let user = req.user;
     user.password = undefined;
+
+    if (user.deleteAccount) {
+      user.deleteAccount = false;
+      user.save(function (err) {
+        if (err) {
+          console.log(err);
+        }
+      });
+    }
+
     res.send(user);
   } catch (err) {
     console.log(err);
@@ -238,8 +248,14 @@ controller.updateUser = async (req, res) => {
 
 controller.deleteUser = async (req, res) => {
   try {
-    await User.findByIdAndDelete(req.user);
-    res.status(204).send();
+    let user = req.user;
+    user.deleteAccount = true;
+    user.save(function (err) {
+      if (err) {
+        return res.status(500).send({ error: "User could not be deleted" });
+      }
+      res.status(204).send();
+    });
   } catch (err) {
     console.log(err);
     res.status(500).send({ error: "User could not be deleted" });
