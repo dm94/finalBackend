@@ -74,7 +74,9 @@ paths:
                   lastName: pepito
                   firstName: geremi
         description: Post the necessary fields for the API to create a new user.
-      description: Works - Create a new user.
+      description: |-
+        addUser
+        Works - Create a new user.
       tags:
         - users
       parameters: []
@@ -93,7 +95,9 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      description: Works - Retrieve the information of the user
+      description: |-
+        getUser
+        Works - Retrieve the information of the user
       tags:
         - users
       security:
@@ -112,7 +116,9 @@ paths:
         - token: []
       tags:
         - users
-      description: Works - Delete User
+      description: |-
+        deleteUser
+        Works - Disable the user
     put:
       summary: Update User Information
       operationId: updateUser
@@ -148,6 +154,7 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
+        updateUser
         Works - Update the information of an existing user.
         action:
         updateimage - To update the image
@@ -292,7 +299,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getUserProfile
-      description: Works - Returns the user profile
+      description: |-
+        getUserProfile
+        Works - Returns the user profile
   /products:
     post:
       summary: Add products
@@ -304,7 +313,9 @@ paths:
           description: Bad Request
         '500':
           description: Internal Server Error
-      description: Works - Create a product
+      description: |-
+        addProduct
+        Works - Create a product
       parameters: []
       tags:
         - products
@@ -382,6 +393,7 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
+        getProducts
         Implemented -Returns a list of products.
         10 products per page
       parameters:
@@ -453,7 +465,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getProduct
-      description: Implemented - Returns a product
+      description: |-
+        getProduct
+        Implemented - Returns a product
     put:
       summary: Update Product
       operationId: updateProduct
@@ -469,7 +483,9 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Allows product data to be updated
+      description: |-
+        updateProduct
+        Implemented - Allows product data to be updated
       tags:
         - products
       security:
@@ -490,7 +506,9 @@ paths:
           description: Product not found
         '500':
           description: Product could not be deleted
-      description: Implemented - Allows the deletion of a product
+      description: |-
+        deleteProduct
+        Implemented - Allows the deletion of a product
       parameters: []
       tags:
         - products
@@ -524,7 +542,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getChats
-      description: Implemented - Returns chats from a user
+      description: |-
+        getChats
+        Implemented - Returns chats from a user
       parameters: []
       security:
         - token: []
@@ -542,7 +562,9 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Create a chat with another user
+      description: |-
+        makeNewChat
+        Implemented - Create a chat with another user
       tags:
         - chat
       security:
@@ -592,7 +614,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getMessages
-      description: Implemented - Return messages from a chat
+      description: |-
+        getMessages
+        Implemented - Return messages from a chat
       tags:
         - chat
       parameters: []
@@ -615,7 +639,9 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Add a message to a chat
+      description: |-
+        addMessage
+        Implemented - Add a message to a chat
       tags:
         - chat
       security:
@@ -634,7 +660,9 @@ paths:
           description: Not Found
         '500':
           description: Chat could not be deleted
-      description: Implemented - Hides the chat until both parties delete the chat
+      description: |-
+        deleteChat
+        Implemented - Hides the chat until both parties delete the chat
       parameters: []
       tags:
         - chat
@@ -663,7 +691,9 @@ paths:
           description: Credenciales incorrectas
         '500':
           description: Internal Server Error
-      description: Works - Returns a temporary access token
+      description: |-
+        userLogin
+        Works - Returns a temporary access token
       parameters: []
       tags:
         - users
@@ -700,6 +730,7 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
+        confirmationEmail
         Works
         Used to validate a user's email.
         If the email is not validated you will not be able to create products or send messages.
@@ -732,7 +763,9 @@ paths:
           description: OK
         '500':
           description: Internal Server Error
-      description: Works - Resend message to verify the user
+      description: |-
+        resendTokenEmail
+        Works - Resend message to verify the user
       security:
         - token: []
       tags:
@@ -808,7 +841,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getCategories
-      description: Works - Returns a list of categories with different filters
+      description: |-
+        getCategories
+        Works - Returns a list of categories with different filters
       parameters:
         - schema:
             type: string
@@ -834,7 +869,9 @@ paths:
           description: This category already exists
         '500':
           description: Internal Server Error
-      description: Works - Add a new category
+      description: |-
+        addCategory
+        Works - Add a new category
       requestBody:
         content:
           application/json:
@@ -888,7 +925,9 @@ paths:
           description: Category could not be deleted
       tags:
         - category
-      description: Works - Use to delete a category
+      description: |-
+        deleteCategory
+        Works - Use to delete a category
       parameters:
         - schema:
             type: string
