@@ -124,7 +124,7 @@ controller.confirmationEmail = async (req, res) => {
         if (err) {
           return res.status(500).send({ msg: err.message });
         }
-        Code.findByIdAndDelete(code);
+        Code.findByIdAndDelete(code._id);
         res.status(200).send({ sucess: "The account has been verified" });
       });
     });
@@ -136,11 +136,7 @@ controller.confirmationEmail = async (req, res) => {
 
 controller.resendTokenEmail = async (req, res) => {
   try {
-    Code.findOne({ _userId: req.user._id }, function (err, code) {
-      if (code) {
-        Code.findByIdAndDelete(code);
-      }
-    });
+    Code.deleteMany({ _userId: req.user });
 
     let code = new Code({
       _userId: req.user._id,
@@ -151,7 +147,7 @@ controller.resendTokenEmail = async (req, res) => {
       if (err) {
         return res.status(500).send({ msg: err.message });
       }
-      mailerController.sendTokenEmail(req.user.email, code.token);
+      mailerController.sendTokenEmail(req.user.email, code.code);
       res.status(200).send();
     });
   } catch (error) {
@@ -214,12 +210,12 @@ controller.updateUser = async (req, res) => {
           if (other) {
             return res.status(409).send({ error: "This email already exists" });
           }
-          Token.deleteMany({ _userId: user._id });
-          let token = new Token({
+          Code.deleteMany({ _userId: user });
+          let code = new Code({
             _userId: user._id,
-            token: crypto.randomBytes(16).toString("hex"),
+            Code: crypto.randomBytes(16).toString("hex"),
           });
-          await token.save();
+          await code.save();
           mailerController.sendTokenEmail(req.body.email, token.token);
         } catch (err) {
           console.log(err);
