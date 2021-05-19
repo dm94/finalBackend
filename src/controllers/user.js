@@ -146,7 +146,7 @@ controller.resendTokenEmail = async (req, res) => {
         return res.status(500).send({ msg: err.message });
       }
       let code = mailerController.sendTokenEmail(req.user.email, token.token);
-      res.status(code).send();
+      res.status(200).send();
     });
   } catch (error) {
     res.status(500).send({ error: "Error sending email" });

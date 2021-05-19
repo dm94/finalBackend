@@ -17,7 +17,7 @@ controller.sendTokenEmail = async (email, token) => {
 
     const html = await emailObj.render("emailVerification.pug", locals);
     await mailer.send(subject, email, text, html);
-    return 204;
+    return 200;
   } catch (error) {
     console.log(error);
     return 500;
