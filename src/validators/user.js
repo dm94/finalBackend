@@ -3,7 +3,7 @@ const PasswordComplexity = require("joi-password-complexity");
 
 function validateImage(body) {
   return Joi.object({
-    image: Joi.string().uri.required(),
+    image: Joi.string().uri().required(),
   }).validate({ image: body.image }, { abortEarly: false });
 }
 
