@@ -723,7 +723,7 @@ paths:
             examples:
               example-1:
                 value:
-                  token: 0b1a28fb037e58c446f57a6506322e33
+                  code: 0b1a28fb037e58c446f57a6506322e33
     get:
       summary: resendTokenEmail
       operationId: resendTokenEmail
