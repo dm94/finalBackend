@@ -86,14 +86,20 @@ controller.addProduct = async (req, res) => {
 controller.getProduct = async (req, res) => {
   try {
     const productId = req.params.id;
+    console.log(productId);
     if (!productId) {
       return res.status(400).send({ error: "Missing data" });
     }
-    const product = await Product.findOne({ _id: productId });
-    if (!product) {
+    try {
+      const product = await Product.findById(productId);
+      if (!product) {
+        res.status(404).send({ error: "Product not found" });
+      } else {
+        res.status(200).send(product);
+      }
+    } catch (err) {
+      console.log(err);
       res.status(404).send({ error: "Product not found" });
-    } else {
-      res.status(200).send(product);
     }
   } catch (err) {
     console.log(err);
