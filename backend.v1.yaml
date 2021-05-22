@@ -135,10 +135,7 @@ paths:
                     dateOfBirth: '2000-08-24T00:00:00.000Z'
                     emailVerified: true
                     createDate: '2019-08-24'
-                    image:
-                      _id: string
-                      url: 'http://example.com'
-                    location: string
+                    image: string
         '400':
           description: Bad Request
         '401':
@@ -268,9 +265,7 @@ paths:
                           dateOfBirth: '2000-08-24T00:00:00.000Z'
                           emailVerified: true
                           createDate: '2019-08-24'
-                          image:
-                            _id: string
-                            url: 'http://example.com'
+                          image: string
                           location: string
                         images:
                           - _id: string
@@ -951,9 +946,9 @@ components:
           type: string
           format: date
           description: The date that the user was created.
-        image:
-          $ref: '#/components/schemas/Image'
         location:
+          type: string
+        image:
           type: string
       required:
         - _id
@@ -1027,8 +1022,6 @@ components:
           type: string
         price:
           type: number
-        climate:
-          type: string
         type:
           type: string
           enum:
