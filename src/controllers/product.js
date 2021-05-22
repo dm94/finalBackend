@@ -86,7 +86,6 @@ controller.addProduct = async (req, res) => {
 controller.getProduct = async (req, res) => {
   try {
     const productId = req.params.id;
-    console.log(productId);
     if (!productId) {
       return res.status(400).send({ error: "Missing data" });
     }
