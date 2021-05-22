@@ -18,6 +18,24 @@ controller.getCategories = async (req, res) => {
   }
 };
 
+controller.getCategory = async (req, res) => {
+  try {
+    const categoryId = req.params.categoryId;
+    if (!categoryId) {
+      return res.status(400).send({ error: "Missing data" });
+    }
+    const category = await Category.findById(categoryId);
+    if (!category) {
+      res.status(404).send({ error: "Product not found" });
+    } else {
+      res.status(200).send(category);
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+};
+
 controller.addCategory = async (req, res) => {
   try {
     if (req.query.apiKey == process.env.API_KEY) {

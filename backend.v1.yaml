@@ -295,8 +295,14 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
         '400':
           description: Bad Request
+        '401':
+          description: Unauthorized
         '500':
           description: Internal Server Error
       description: Works - Create a product
@@ -329,8 +335,6 @@ paths:
                   type: number
                   minimum: 0
                   format: double
-                climate:
-                  type: string
                 description:
                   type: string
                   maxLength: 500
@@ -469,6 +473,42 @@ paths:
         - products
       security:
         - token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Product'
+            examples:
+              example-1:
+                value:
+                  _id: string
+                  publisherId:
+                    _id: string
+                    firstName: string
+                    email: user@example.com
+                    username: string
+                    password: pa$$word
+                    lastName: string
+                    dateOfBirth: '2000-08-24T00:00:00.000Z'
+                    emailVerified: true
+                    createDate: '2019-08-24'
+                    location: string
+                    image: string
+                  images:
+                    - _id: string
+                      url: 'http://example.com'
+                  title: string
+                  size: string
+                  price: 0
+                  type: plant
+                  description: string
+                  publishedDate: '2019-08-24'
+                  sold: true
+                  category:
+                    type: plant
+                    category: string
+                    subcategory: string
+        description: ''
     delete:
       summary: deleteProduct
       operationId: deleteProduct
@@ -893,6 +933,22 @@ paths:
           required: true
       security:
         - token: []
+    get:
+      summary: getCategory
+      operationId: getCategory
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+        '400':
+          description: Bad Request
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
 components:
   schemas:
     User:

@@ -52,8 +52,8 @@ controller.addProduct = async (req, res) => {
 
       let filter = {
         type: req.body.type,
-        category: req.body.category,
-        subcategory: req.body.subcategory,
+        category: req.body.category ? req.body.category : undefined,
+        subcategory: req.body.subcategory ? req.body.subcategory : undefined,
       };
 
       const category = await Category.findOne(filter);
@@ -64,10 +64,9 @@ controller.addProduct = async (req, res) => {
         title: req.body.title,
         size: req.body.size,
         price: req.body.price,
-        climate: req.body.climate,
         description: req.body.description,
         type: req.body.type,
-        category: category,
+        category: category ? category : undefined,
       });
 
       await newProduct.save();

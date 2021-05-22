@@ -14,6 +14,7 @@ router.delete("/products/:id", passport.auth, productController.deleteProduct);
 
 router.get("/categories", categoryController.getCategories);
 router.post("/categories", passport.auth, categoryController.addCategory);
+router.get("/categories/:categoryId", categoryController.getCategory);
 router.delete(
   "/categories/:categoryId",
   passport.auth,
