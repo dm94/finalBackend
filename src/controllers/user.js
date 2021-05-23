@@ -155,12 +155,31 @@ controller.resendTokenEmail = async (req, res) => {
   }
 };
 
+controller.getUserById = async (req, res) => {
+  try {
+    const userId = req.params.id;
+
+    const userData = await User.findById(userId).select(
+      "_id username createDate firstName location image emailVerified"
+    );
+
+    if (!userData) {
+      return res.status(404).send();
+    }
+
+    res.status(200).send(userData);
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+};
+
 controller.getUserProfile = async (req, res) => {
   try {
     const userProfile = req.params.username;
 
     const userData = await User.findOne({ username: userProfile }).select(
-      "_id username createDate firstName location"
+      "_id username createDate firstName location image emailVerified"
     );
 
     if (!userData) {
@@ -177,6 +196,8 @@ controller.getUserProfile = async (req, res) => {
       createDate: userData.createDate,
       firstName: userData.firstName,
       location: userData.location,
+      image: userData.image,
+      emailVerified: userData.emailVerified,
       products: products,
     };
 

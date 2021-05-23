@@ -247,6 +247,8 @@ paths:
                     type: array
                     items:
                       $ref: '#/components/schemas/Product'
+                  image:
+                    type: string
               examples:
                 example-1:
                   value:
@@ -950,6 +952,54 @@ paths:
       description: Works - Get category
       tags:
         - category
+  '/users/{id}':
+    parameters:
+      - schema:
+          type: string
+        name: id
+        in: path
+        required: true
+    get:
+      summary: getUserById
+      tags:
+        - users
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  _id:
+                    type: string
+                  username:
+                    type: string
+                  firstName:
+                    type: string
+                  createDate:
+                    type: string
+                    format: date-time
+                  location:
+                    type: string
+                  image:
+                    type: string
+                    format: uri
+              examples:
+                example-1:
+                  value:
+                    _id: string
+                    username: string
+                    firstName: string
+                    createDate: '2019-08-24T14:15:22Z'
+                    location: string
+                    image: 'http://example.com'
+        '404':
+          description: Not Found
+        '500':
+          description: Internal Server Error
+      operationId: getUserById
+      description: Works - Returns the user public data
 components:
   schemas:
     User:

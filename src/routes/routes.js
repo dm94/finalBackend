@@ -28,6 +28,7 @@ router.post("/users", userController.addUser);
 router.get("/users", passport.auth, userController.getUser);
 router.put("/users", passport.auth, userController.updateUser);
 router.delete("/users", passport.auth, userController.deleteUser);
+router.get("/users/:id", passport.auth, userController.getUserById);
 router.get("/users/:username/profile", userController.getUserProfile);
 
 router.get("/users/:username/chats", passport.auth, chatController.getChats);
