@@ -3,7 +3,7 @@ const Schema = mongoose.Schema;
 
 const ProductSchema = new Schema({
   publisherId: { type: Schema.Types.ObjectId, ref: "user", required: true },
-  image: { type: String, require: false },
+  images: [{ type: String, require: false }],
   title: { type: String, require: true },
   category: { type: Schema.Types.ObjectId, ref: "category" },
   size: { type: String, require: false },

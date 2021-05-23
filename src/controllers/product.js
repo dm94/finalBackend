@@ -134,10 +134,10 @@ controller.updateProduct = async (req, res) => {
         product.title = req.body.title;
         product.size = req.body.size;
         product.price = req.body.price;
-        product.climate = req.body.climate;
         product.description = req.body.description;
         product.type = req.body.type;
         product.category = category;
+        product.images = req.body.images;
 
         await product.save();
 

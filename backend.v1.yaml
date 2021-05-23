@@ -268,8 +268,7 @@ paths:
                           image: string
                           location: string
                         images:
-                          - _id: string
-                            url: 'http://example.com'
+                          - 'http://example.com'
                         title: string
                         size: string
                         price: 0
@@ -495,8 +494,7 @@ paths:
                     location: string
                     image: string
                   images:
-                    - _id: string
-                      url: 'http://example.com'
+                    - 'http://example.com'
                   title: string
                   size: string
                   price: 0
@@ -949,6 +947,9 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
+      description: Works - Get category
+      tags:
+        - category
 components:
   schemas:
     User:
@@ -1071,7 +1072,8 @@ components:
           format: uri
           type: array
           items:
-            $ref: '#/components/schemas/Image'
+            type: string
+            format: uri
         title:
           type: string
         size:
@@ -1197,37 +1199,11 @@ components:
           type: plant
           category: string
           subcategory: string
-    Image:
-      title: Image
-      type: object
-      properties:
-        _id:
-          type: string
-        url:
-          type: string
-          format: uri
-      description: Object for each image
   securitySchemes:
     token:
       type: http
       scheme: bearer
   responses: {}
-  parameters:
-    username:
-      name: username
-      in: path
-      required: true
-      schema:
-        type: string
-      description: User name
-    type:
-      name: type
-      in: query
-      required: false
-      schema:
-        type: string
-        enum:
-          - plant
-          - insect
+  parameters: {}
 security:
   - token: []
