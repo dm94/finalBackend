@@ -138,6 +138,7 @@ controller.updateProduct = async (req, res) => {
         product.type = req.body.type;
         product.category = category;
         product.images = req.body.images;
+        product.sold = req.body.sold;
 
         await product.save();
 
@@ -160,12 +161,12 @@ controller.deleteProduct = async (req, res) => {
     if (!productId) {
       return res.status(400).send({ error: "Missing data" });
     }
-    const product = await Product.findOne({ _id: productId });
+    const product = await Product.findById(productId);
     if (!product) {
       res.status(404).send({ error: "Product not found" });
     } else {
       const user = req.user;
-      if (product.publisherId == user._id) {
+      if (product.publisherId.equals(user._id)) {
         try {
           await Product.findByIdAndDelete(product);
           res.status(204).send();
