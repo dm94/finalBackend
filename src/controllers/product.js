@@ -8,19 +8,24 @@ controller.getProducts = async (req, res) => {
     let filter = {};
     let sort = {};
 
-    let sortType = req.query.orderby == "price" ? req.query.orderby : "date";
-    let sortOrder = req.query.orderby == "asc" ? req.query.orderby : "desc";
+    let sortType =
+      req.query.orderby == "price" ? req.query.orderby : "publishedDate";
+    let sortOrder = req.query.sort == "asc" ? req.query.sort : "desc";
 
     sort[sortType] = sortOrder;
 
     if (req.query.type) {
       filter.type = req.query.type;
     }
+
     if (req.query.categoryId) {
       filter.category = req.query.categoryId;
     }
     if (req.query.title) {
       filter.title = new RegExp("^" + req.query.title + "$", "i");
+    }
+    if (req.query.size) {
+      filter.size = req.query.size;
     }
 
     let perPage = 10;
