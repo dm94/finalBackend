@@ -243,18 +243,19 @@ paths:
                     type: string
                   location:
                     type: string
+                  image:
+                    type: string
                   products:
                     type: array
                     items:
                       $ref: '#/components/schemas/Product'
-                  image:
-                    type: string
               examples:
                 example-1:
                   value:
                     username: string
                     firstName: string
                     location: string
+                    image: string
                     products:
                       - _id: string
                         publisherId:
@@ -267,14 +268,13 @@ paths:
                           dateOfBirth: '2000-08-24T00:00:00.000Z'
                           emailVerified: true
                           createDate: '2019-08-24'
-                          image: string
                           location: string
+                          image: string
                         images:
                           - 'http://example.com'
                         title: string
                         size: string
                         price: 0
-                        climate: string
                         type: plant
                         description: string
                         publishedDate: '2019-08-24'
