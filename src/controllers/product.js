@@ -22,7 +22,7 @@ controller.getProducts = async (req, res) => {
       filter.category = req.query.categoryId;
     }
     if (req.query.title) {
-      filter.title = new RegExp("^" + req.query.title + "$", "i");
+      filter.title = new RegExp("^" + req.query.title.toLowerCase(), "i");
     }
     if (req.query.size) {
       filter.size = req.query.size;
