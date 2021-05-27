@@ -590,11 +590,8 @@ paths:
               properties:
                 idProduct:
                   type: string
-                message:
-                  type: string
               required:
                 - idProduct
-                - message
   '/chats/{chatId}':
     parameters:
       - schema:
@@ -610,24 +607,24 @@ paths:
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Message'
+                $ref: '#/components/schemas/Chat'
               examples:
                 example-1:
                   value:
-                    - _id: string
-                      chatId: string
-                      senderId: string
-                      text: string
-                      date: '2019-08-24T14:15:22Z'
-                      hasRead: true
+                    _id: string
+                    productId: string
+                    sellerId: string
+                    buyerId: string
+                    deletedBySeller: true
+                    deletedByBuyer: true
         '403':
           description: Forbidden
+        '404':
+          description: Not Found
         '500':
           description: Internal Server Error
-      operationId: getMessages
-      description: Implemented - Return messages from a chat
+      operationId: getChat
+      description: Implemented - Return a chat
       tags:
         - chat
       parameters: []
@@ -655,6 +652,16 @@ paths:
         - chat
       security:
         - token: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
     delete:
       summary: deleteChat
       operationId: deleteChat
@@ -1000,6 +1007,44 @@ paths:
           description: Internal Server Error
       operationId: getUserById
       description: Works - Returns the user public data
+  '/chats/{chatId}/messages':
+    parameters:
+      - schema:
+          type: string
+        name: chatId
+        in: path
+        required: true
+    get:
+      summary: getMessages
+      responses:
+        '200':
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Message'
+              examples:
+                example-1:
+                  value:
+                    - _id: string
+                      chatId: string
+                      senderId: string
+                      text: string
+                      date: '2019-08-24T14:15:22Z'
+                      hasRead: true
+        '403':
+          description: Forbidden
+        '500':
+          description: Internal Server Error
+      operationId: getMessages
+      description: Implemented - Return messages from a chat
+      tags:
+        - chat
+      parameters: []
+      security:
+        - token: []
 components:
   schemas:
     User:

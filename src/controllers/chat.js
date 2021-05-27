@@ -20,7 +20,7 @@ controller.makeNewChat = async (req, res) => {
   try {
     let buyer = req.user;
 
-    if (req.body.idProduct && req.body.message) {
+    if (req.body.idProduct) {
       const product = await Product.findOne({ _id: req.body.idProduct });
 
       if (product) {
@@ -41,20 +41,7 @@ controller.makeNewChat = async (req, res) => {
           buyerId: buyer._id,
         });
         if (chat) {
-          let newMessage = new Message({
-            chatId: chat._id,
-            senderId: chat.buyerId,
-            text: req.body.message,
-          });
-          await newMessage.save();
-
-          const message = await Message.findOne({
-            chatId: chat._id,
-            senderId: chat.buyerId,
-            text: req.body.message,
-          });
-
-          return res.status(201).send(message);
+          return res.status(201).send(chat);
         }
         return res.status(500).send();
       } else {
@@ -73,13 +60,11 @@ controller.getMessages = async (req, res) => {
   try {
     const chatId = req.params.chatid;
 
-    const chat = await Chat.findOne({
-      _id: chatId,
-    });
+    const chat = await Chat.findById(String(chatId));
 
     if (
       chat &&
-      (chat.sellerId == req.user._id || chat.buyerId == req.user._id)
+      (chat.sellerId.equals(req.user._id) || chat.buyerId.equals(req.user._id))
     ) {
       let perPage = 10;
       let page = req.query.page > 0 ? req.query.page : 0;
@@ -98,16 +83,40 @@ controller.getMessages = async (req, res) => {
   }
 };
 
+controller.getChat = async (req, res) => {
+  try {
+    const chatId = req.params.chatid;
+
+    if (chatId) {
+      const chat = await Chat.findById(String(chatId));
+      if (chat) {
+        if (
+          chat.sellerId.equals(req.user._id) ||
+          chat.buyerId.equals(req.user._id)
+        ) {
+          return res.status(200).send(chat);
+        }
+        return res.status(403).send();
+      }
+      return res.status(404).send();
+    }
+  } catch (err) {
+    console.log(err);
+    res.status(500).send();
+  }
+};
+
 controller.addMessage = async (req, res) => {
   try {
     const chatId = req.params.chatid;
 
     if (chatId && req.body.message) {
-      const chat = await Chat.findOne({
-        _id: chatId,
-      });
+      const chat = await Chat.findById(chatId);
       if (chat) {
-        if (chat.sellerId == req.user._id || chat.buyerId == req.user._id) {
+        if (
+          chat.sellerId.equals(req.user._id) ||
+          chat.buyerId.equals(req.user._id)
+        ) {
           let newMessage = new Message({
             chatId: chat._id,
             senderId: req.user._id,

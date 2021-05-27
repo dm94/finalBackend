@@ -31,10 +31,15 @@ router.delete("/users", passport.auth, userController.deleteUser);
 router.get("/users/:id", userController.getUserById);
 router.get("/users/:username/profile", userController.getUserProfile);
 
-router.get("/users/:username/chats", passport.auth, chatController.getChats);
+router.get("/chats", passport.auth, chatController.getChats);
 router.post("/chats", passport.auth, chatController.makeNewChat);
-router.get("/chats/:chatid", passport.auth, chatController.getMessages);
+router.get("/chats/:chatid", passport.auth, chatController.getChat);
 router.post("/chats/:chatid", passport.auth, chatController.addMessage);
 router.delete("/chats/:chatid", passport.auth, chatController.deleteChat);
+router.get(
+  "/chats/:chatid/messages",
+  passport.auth,
+  chatController.getMessages
+);
 
 module.exports = router;
