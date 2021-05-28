@@ -1,10 +1,11 @@
 const helper = {};
+const { connect } = require("mongoose");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
 let transport = null;
 
-if (process.env.MAIL_TEST_SERVER) {
+if (process.env.MAIL_TEST_SERVER == "true") {
   nodemailer.createTestAccount((err, account) => {
     if (err) {
       console.error("Failed to create a testing account. " + err.message);
