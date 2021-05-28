@@ -75,9 +75,7 @@ controller.getMessages = async (req, res) => {
       let perPage = 10;
       let page = req.query.page > 0 ? req.query.page : 0;
 
-      let messages = await Message.find({ chatId: chatId })
-        .limit(perPage)
-        .skip(perPage * page);
+      let messages = await Message.find({ chatId: chatId });
 
       res.status(200).send(messages);
     } else {
