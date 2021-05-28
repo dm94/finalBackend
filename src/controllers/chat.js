@@ -9,6 +9,12 @@ controller.getChats = async (req, res) => {
       $or: [{ sellerId: req.user._id }, { buyerId: req.user._id }],
     });
 
+    chats = chats.filter(
+      (chat) =>
+        !(chat.sellerId.equals(req.user._id) && chat.deletedBySeller) &&
+        !(chat.buyerId.equals(req.user._id) && chat.deletedByBuyer)
+    );
+
     res.status(200).send(chats);
   } catch (err) {
     console.log(err);
@@ -154,10 +160,10 @@ controller.deleteChat = async (req, res) => {
       });
 
       if (chat) {
-        if (chat.sellerId == req.user._id) {
+        if (chat.sellerId.equals(req.user._id)) {
           chat.deletedBySeller = true;
           await chat.save();
-        } else if (chat.buyerId == req.user._id) {
+        } else if (chat.buyerId.equals(req.user._id)) {
           chat.deletedByBuyer = true;
           await chat.save();
         } else {
