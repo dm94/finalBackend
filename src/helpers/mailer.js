@@ -1,5 +1,4 @@
 const helper = {};
-const { connect } = require("mongoose");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 
