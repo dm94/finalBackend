@@ -65,7 +65,7 @@ controller.addProduct = async (req, res) => {
 
       let newProduct = new Product({
         publisherId: publisher,
-        image: req.body.image,
+        images: req.body.images,
         title: req.body.title,
         size: req.body.size,
         price: req.body.price,
