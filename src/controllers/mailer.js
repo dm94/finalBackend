@@ -8,6 +8,7 @@ const emailObj = new Email({
     root: appDir,
   },
 });
+require("dotenv").config();
 
 controller.sendTokenEmail = async (email, token) => {
   try {
@@ -17,6 +18,19 @@ controller.sendTokenEmail = async (email, token) => {
 
     const html = await emailObj.render("emailVerification.pug", locals);
     await mailer.send(subject, email, text, html);
+    return 200;
+  } catch (error) {
+    console.log(error);
+    return 500;
+  }
+};
+
+controller.sendDeleteAccountEmail = async (user) => {
+  try {
+    const subject = "Un usuario quiere borrar su cuenta";
+    const text =
+      "El usuario " + user + " quiere borrar su cuenta de la plataforma";
+    await mailer.send(subject, process.env.MAIL_DIRECTION, text, text);
     return 200;
   } catch (error) {
     console.log(error);

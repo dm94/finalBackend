@@ -273,6 +273,7 @@ controller.deleteUser = async (req, res) => {
   try {
     let user = req.user;
     user.deleteAccount = true;
+    mailerController.sendDeleteAccountEmail(user.username);
     user.save(function (err) {
       if (err) {
         return res.status(500).send({ error: "User could not be deleted" });
