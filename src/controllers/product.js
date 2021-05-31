@@ -28,7 +28,7 @@ controller.getProducts = async (req, res) => {
       filter.size = req.query.size;
     }
 
-    let perPage = 10;
+    let perPage = 12;
     let page = req.query.page > 0 ? req.query.page : 0;
 
     let products = await Product.find(filter)
