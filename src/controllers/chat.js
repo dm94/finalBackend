@@ -65,17 +65,20 @@ controller.makeNewChat = async (req, res) => {
 controller.getMessages = async (req, res) => {
   try {
     const chatId = req.params.chatid;
-
     const chat = await Chat.findById(String(chatId));
 
     if (
       chat &&
       (chat.sellerId.equals(req.user._id) || chat.buyerId.equals(req.user._id))
     ) {
-      let perPage = 10;
-      let page = req.query.page > 0 ? req.query.page : 0;
-
       let messages = await Message.find({ chatId: chatId });
+
+      messages.forEach((message) => {
+        if (!message.senderId.equals(req.user._id)) {
+          message.hasRead = true;
+          message.save();
+        }
+      });
 
       res.status(200).send(messages);
     } else {
@@ -153,9 +156,7 @@ controller.deleteChat = async (req, res) => {
     const chatId = req.params.chatid;
 
     if (chatId != null) {
-      const chat = await Chat.findOne({
-        _id: chatId,
-      });
+      const chat = await Chat.findById(String(chatId));
 
       if (chat) {
         if (chat.sellerId.equals(req.user._id)) {
@@ -170,6 +171,7 @@ controller.deleteChat = async (req, res) => {
         if (chat.deletedByBuyer && chat.deletedBySeller) {
           try {
             await Chat.findByIdAndDelete(chat);
+            await Message.deleteMany({ chatId: String(chatId) });
             return res.status(204).send();
           } catch (err) {
             console.log(err);

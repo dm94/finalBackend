@@ -2,6 +2,7 @@ const controller = {};
 const Product = require("../models/product");
 const Category = require("../models/category");
 const productValidator = require("../validators/product");
+const Chat = require("../models/chat");
 
 controller.getProducts = async (req, res) => {
   try {
@@ -174,6 +175,7 @@ controller.deleteProduct = async (req, res) => {
       if (product.publisherId.equals(user._id)) {
         try {
           await Product.findByIdAndDelete(product);
+          await Chat.deleteMany({ productId: String(productId) });
           res.status(204).send();
         } catch (err) {
           console.log(err);
