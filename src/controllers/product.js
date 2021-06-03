@@ -6,7 +6,7 @@ const Chat = require("../models/chat");
 
 controller.getProducts = async (req, res) => {
   try {
-    let filter = {};
+    let filter = { sold: false };
     let sort = {};
 
     let sortType =
