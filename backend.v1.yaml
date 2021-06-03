@@ -1,8 +1,8 @@
 openapi: 3.0.0
 info:
-  title: backend
+  title: Backend
   version: '1.0'
-  description: API for the backend of the final project.
+  description: API for the backend of the final project of the FullStack 2021 v2 course.
   contact:
     name: Daniel
     url: 'https://github.com/dm94'
@@ -74,7 +74,7 @@ paths:
                   lastName: pepito
                   firstName: geremi
         description: Post the necessary fields for the API to create a new user.
-      description: Works - Create a new user.
+      description: Create a new user.
       tags:
         - users
       parameters: []
@@ -93,7 +93,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      description: Works - Retrieve the information of the user
+      description: Retrieve the information of the user
       tags:
         - users
       security:
@@ -112,7 +112,7 @@ paths:
         - token: []
       tags:
         - users
-      description: Works - Disable the user
+      description: Disable the user
     put:
       summary: updateUser
       operationId: updateUser
@@ -145,7 +145,7 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
-        Works - Update the information of an existing user.
+        Update the information of an existing user.
         action:
         updateimage - To update the image
         updateprofile - To update firstName, lastName and location
@@ -237,14 +237,21 @@ paths:
               schema:
                 type: object
                 properties:
+                  _id:
+                    type: string
                   username:
                     type: string
                   firstName:
                     type: string
+                  createDate:
+                    type: string
+                    format: date-time
                   location:
                     type: string
                   image:
                     type: string
+                  emailVerified:
+                    type: boolean
                   products:
                     type: array
                     items:
@@ -252,10 +259,13 @@ paths:
               examples:
                 example-1:
                   value:
+                    _id: string
                     username: string
                     firstName: string
+                    createDate: '2019-08-24T14:15:22Z'
                     location: string
                     image: string
+                    emailVerified: true
                     products:
                       - _id: string
                         publisherId:
@@ -288,7 +298,9 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getUserProfile
-      description: Works - Returns the user profile
+      description: |-
+        Returns the user profile.
+        Returns all its products including those sold
   /products:
     post:
       summary: addProduct
@@ -306,7 +318,7 @@ paths:
           description: Unauthorized
         '500':
           description: Internal Server Error
-      description: Works - Create a product
+      description: Create a product
       parameters: []
       tags:
         - products
@@ -382,8 +394,9 @@ paths:
         '500':
           description: Internal Server Error
       description: |-
-        Implemented -Returns a list of products.
-        10 products per page
+        Returns a list of products.
+        12 products per page
+        Only return unsold products
       parameters:
         - schema:
             type: string
@@ -453,7 +466,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getProduct
-      description: Implemented - Returns a product
+      description: Returns a product
     put:
       summary: updateProduct
       operationId: updateProduct
@@ -469,7 +482,7 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Allows product data to be updated
+      description: Allows product data to be updated
       tags:
         - products
       security:
@@ -525,7 +538,7 @@ paths:
           description: Product not found
         '500':
           description: Product could not be deleted
-      description: Implemented - Allows the deletion of a product
+      description: Allows the deletion of a product
       parameters: []
       tags:
         - products
@@ -559,7 +572,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getChats
-      description: Implemented - Returns chats from a user
+      description: Returns chats from a user
       parameters: []
       security:
         - token: []
@@ -570,6 +583,10 @@ paths:
       responses:
         '201':
           description: Created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat'
         '400':
           description: Bad Request
         '404':
@@ -577,7 +594,7 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Create a chat with another user
+      description: 'Create a chat with another user. If a chat with that data already exists, returns the data from that chat.'
       tags:
         - chat
       security:
@@ -624,7 +641,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getChat
-      description: Implemented - Return a chat
+      description: Return a chat
       tags:
         - chat
       parameters: []
@@ -647,7 +664,7 @@ paths:
         '500':
           description: Internal Server Error
       parameters: []
-      description: Implemented - Add a message to a chat
+      description: Add a message to a chat
       tags:
         - chat
       security:
@@ -676,7 +693,7 @@ paths:
           description: Not Found
         '500':
           description: Chat could not be deleted
-      description: Implemented - Hides the chat until both parties delete the chat
+      description: Hides the chat until both parties delete the chat
       parameters: []
       tags:
         - chat
@@ -705,7 +722,7 @@ paths:
           description: Credenciales incorrectas
         '500':
           description: Internal Server Error
-      description: Works - Returns a temporary access token
+      description: Returns a temporary access token
       parameters: []
       tags:
         - users
@@ -741,10 +758,7 @@ paths:
           description: This user has already been verified
         '500':
           description: Internal Server Error
-      description: |-
-        Works
-        Used to validate a user's email.
-        If the email is not validated you will not be able to create products or send messages.
+      description: Used to validate a user's email.
       security:
         - token: []
       parameters: []
@@ -774,7 +788,7 @@ paths:
           description: OK
         '500':
           description: Internal Server Error
-      description: Works - Resend message to verify the user
+      description: Resend message to verify the user
       security:
         - token: []
       tags:
@@ -850,7 +864,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getCategories
-      description: Works - Returns a list of categories with different filters
+      description: Returns a list of categories with different filters
       parameters:
         - schema:
             type: string
@@ -876,7 +890,7 @@ paths:
           description: This category already exists
         '500':
           description: Internal Server Error
-      description: Works - Add a new category
+      description: Add a new category
       requestBody:
         content:
           application/json:
@@ -930,7 +944,7 @@ paths:
           description: Category could not be deleted
       tags:
         - category
-      description: Works - Use to delete a category
+      description: Use to delete a category
       parameters:
         - schema:
             type: string
@@ -956,7 +970,7 @@ paths:
           description: Not Found
         '500':
           description: Internal Server Error
-      description: Works - Get category
+      description: Get category
       tags:
         - category
   '/users/{id}':
@@ -992,6 +1006,8 @@ paths:
                   image:
                     type: string
                     format: uri
+                  emailVerified:
+                    type: boolean
               examples:
                 example-1:
                   value:
@@ -1006,7 +1022,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getUserById
-      description: Works - Returns the user public data
+      description: Returns the user public data
   '/chats/{chatId}/messages':
     parameters:
       - schema:
@@ -1039,7 +1055,7 @@ paths:
         '500':
           description: Internal Server Error
       operationId: getMessages
-      description: Implemented - Return messages from a chat
+      description: Return messages from a chat
       tags:
         - chat
       parameters: []
